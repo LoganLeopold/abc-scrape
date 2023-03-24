@@ -1,23 +1,33 @@
-import logo from './logo.svg';
+import { useEffect, useRef } from 'react';
+import axios from 'axios';
 import './App.css';
 
 function App() {
+  const render = useRef(false)
+
+  useEffect(() => {
+    const getDoc = async () => {
+      console.log("GETDOC")
+      try {
+        const response = await axios.get(
+          'http://localhost:3001/grabAbc',
+          // 'https://crossorigin.me/https://www.abc.virginia.gov/limited/allocated_stores_03_17_2023_12_00_pmNAreOczMH7TnXRb6s2r05MJZ.html',
+        );
+        console.log(response, "response");
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    if (render.current === false) {
+      render.current = true
+    } else {
+      getDoc();
+    }
+  });
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      
     </div>
   );
 }
