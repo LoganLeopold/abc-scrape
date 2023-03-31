@@ -5,19 +5,30 @@ import './App.css';
 function App() {
   const render = useRef(false)
 
-  useEffect(() => {
-    const getDoc = async () => {
-      console.log("GETDOC")
-      try {
-        const response = await axios.get(
-          'http://localhost:3001/grabAbc',
-          // 'https://crossorigin.me/https://www.abc.virginia.gov/limited/allocated_stores_03_17_2023_12_00_pmNAreOczMH7TnXRb6s2r05MJZ.html',
-        );
-        console.log(response, "response");
-      } catch (error) {
-        console.log(error)
-      }
+  const getDoc = async () => {
+    console.log("GETDOC")
+    try {
+      const response = await axios.get(
+        'http://localhost:3001/grabAbc',
+      );
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
     }
+  }
+
+  const getMapTest = async() => {
+    try {
+      const response = await axios.get(
+        'http://localhost:3001/testMap',
+      );
+      console.log(response)
+    } catch (error) { 
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
     if (render.current === false) {
       render.current = true
     } else {
