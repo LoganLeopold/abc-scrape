@@ -9,21 +9,21 @@ const loader = new Loader({
   libraries: ["maps"]
 })
 
-let map;
+// let map;
 
 // loader.load().then( async (google) => {
 //   const { Map } = await google.maps.importLibrary("maps");
 //   map = new Map(
 //     document.getElementById("map"), 
 //     {
-//       center: {lat: 36.8479673, lng: -76.16874849999999},
-//       zoom: 17,
+//       center: {lat: 38.885445, lng: -76.992772},
+//       zoom: 12,
 //     }
 //   );
 
 //   const marker = new google.maps.Marker({
-//     position: {lat: 36.8479673, lng: -76.16874849999999},
-//     label: "Home",
+//     position: {lat: 38.81405480000001, lng: -77.0429216},
+//     label: "ABC",
 //     map: map, 
 //     clickable: true
 //   });
@@ -32,11 +32,10 @@ let map;
 function App() {
   const render = useRef(false)
 
-  const getDoc = async () => {
-    console.log("GETDOC")
+  const processLocations = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:3001/grabAbc',
+        'http://localhost:3001/processLocations',
       );
       console.log(response.data)
     } catch (error) {
@@ -77,9 +76,9 @@ function App() {
     if (render.current === false) {
       render.current = true
     } else {
-      // getDoc();
+      processLocations();
       // getMapTest();
-      getPlaceTest()
+      // getPlaceTest()
     }
   });
 

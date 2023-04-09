@@ -9,29 +9,42 @@ const { JSDOM } = jsdom;
 const app = express();
 const port = 3001;
 
-app.get('/grabAbc', async (req, res) => {
+/*
+  - Process the DOM 
+  - Turn into locations/placeIds
+*/
+app.get('/processLocations', async (req, res) => {
+  console.log("processLocations")
   try {
-    const response = await axios.get(
-      'https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html',  
-    )
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+    let response = await axios.get('http://127.0.0.1:5500/Fake.html')
 
     // Retrieve addresses 
     let doc = new JSDOM(response.data)
     let links = doc.window.document.querySelectorAll("#reportLook a")
     let addresses = Array.from(links).map( link => link.textContent )
-    result = addresses
 
-    // Retrieve address geocodes
-    // let locations = await Promise.all(addresses.map( async (value) => {
-    //   let geocode = await googleClient.geocode({params: {key: process.env.GOOGLE_MAPS_KEY, address: value}})
-    //   return geocode.data.results
-    // }))
-    // result = locations;
+    let places = await Promise.all( addresses.map(async (add, i) => {    
+      let thisPlace = await googleClient.findPlaceFromText({
+        params: {
+          key: process.env.GOOGLE_MAPS_KEY,
+          input: `${add} Virginia ABC`,
+          inputtype: "textquery",
+          fields: [
+            'geometry',
+            'place_id'
+          ],
+        }
+      })
+      console.log(thisPlace.data)
+      return thisPlace.data
+    }))
 
-    // let testPlaceId = googleClient.m
+    result = places
 
+    console.log(places)
     // just change result var - leave this
     res.send(result)
   } catch (err) {
@@ -39,49 +52,52 @@ app.get('/grabAbc', async (req, res) => {
   }
 });
 
-app.get('/testMap', async (req, res) => {
-  try {
-    const test = await googleClient.geocode({params:{ key: process.env.GOOGLE_MAPS_KEY, address: "258 Toy Avenue Virginia Beach, VA 23452"}})
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.send(test.data)
-  } catch (err) {
-    console.log(err)
-    return err
-  }
-});
-
-app.get("/testPlace", async (req, res) => {
-  console.log(req.query.test)
-  // try {
-  //   const placeTest = await googleClient.findPlaceFromText({
-  //     params: {
-  //       key: process.env.GOOGLE_MAPS_KEY,
-  //       input: "Virginia ABC",
-  //       inputtype: "textquery",
-  //       fields: [
-  //         'geometry',
-  //         'place_id'
-  //       ],
-  //       locationbias: {
-  //         lat: 38.852790127368536, 
-  //         lng: -77.05175441936312
-  //       }
-  //     }
-  //   })
-  //   res.header("Access-Control-Allow-Origin", "*");
-  //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  //   console.log("placeTest Data \n",placeTest.data)
-  //   res.send(placeTest.data)
-  // } catch (err) {
-  //   console.log(err.response)
-  //   return err
-  // }
-})
-
 app.listen(port, async () => {
   console.log(`Example app listening on port ${port}`);
 })
 
+/*
+  HOLDING PLACES LOGIC DURING FAKE DOC TESTING
+*/
 
+    // let places = await Promises.all( addresses.map(async (add, i) => {    
+    //   let testPlace = await googleClient.findPlaceFromText({
+    //     params: {
+    //       key: process.env.GOOGLE_MAPS_KEY,
+    //       input: `${add} Virginia ABC`,
+    //       inputtype: "textquery",
+    //       fields: [
+    //         'geometry',
+    //         'place_id'
+    //       ],
+    //     }
+    //   })
+    //   return testPlace.data.results
+    // }))
 
+/*
+  GEOCODE LOGIC
+*/
+// Retrieve address geocodes
+// let locations = await Promise.all(addresses.map( async (value) => {
+//   let geocode = await googleClient.geocode({params: {key: process.env.GOOGLE_MAPS_KEY, address: value}})
+//   return geocode.data.results
+// }))
+// result = locations;
+
+// let testPlaceId = googleClient.m
+
+/*
+  Initial map creation testing 
+*/
+// app.get('/testMap', async (req, res) => {
+//   try {
+//     const test = await googleClient.geocode({params:{ key: process.env.GOOGLE_MAPS_KEY, address: "258 Toy Avenue Virginia Beach, VA 23452"}})
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     res.send(test.data)
+//   } catch (err) {
+//     console.log(err)
+//     return err
+//   }
+// });
