@@ -9,25 +9,20 @@ const loader = new Loader({
   libraries: ["maps"]
 })
 
-// let map;
+let map;
+let googleObj;
 
-// loader.load().then( async (google) => {
-//   const { Map } = await google.maps.importLibrary("maps");
-//   map = new Map(
-//     document.getElementById("map"), 
-//     {
-//       center: {lat: 38.885445, lng: -76.992772},
-//       zoom: 12,
-//     }
-//   );
-
-//   const marker = new google.maps.Marker({
-//     position: {lat: 38.81405480000001, lng: -77.0429216},
-//     label: "ABC",
-//     map: map, 
-//     clickable: true
-//   });
-// })
+loader.load().then( async (google) => {
+  googleObj = google;
+  const { Map } = await google.maps.importLibrary("maps");
+  map = new Map(
+    document.getElementById("map"), 
+    {
+      center: {lat: 38.885445, lng: -76.992772},
+      zoom: 12,
+    }
+  );
+})
 
 function App() {
   const render = useRef(false)
@@ -37,7 +32,33 @@ function App() {
       const response = await axios.get(
         'http://localhost:3001/processLocations',
       );
-      console.log(response.data)
+
+      response.data.forEach( place => {
+        if (place.candidates.length > 0) console.log(place.candidates[0])
+      })
+
+      // for (let i = 0; i < response.data.length; i++) {
+      //   const place = response.data[i]
+      //   if (place.candidates.length > 0) {
+      //     const marker = new googleObj.maps.Marker({
+      //       position: place.candidates[0].geometry.location,
+      //       label: "ABC",
+      //       map: map, 
+      //       clickable: true
+      //     });
+      //   }
+      // }
+
+
+      /*
+        Need add Markers here looping over response.data here
+      */ 
+        // const marker = new google.maps.Marker({
+        //   position: {lat: 38.81405480000001, lng: -77.0429216},
+        //   label: "ABC",
+        //   map: map, 
+        //   clickable: true
+        // });
     } catch (error) {
       console.log(error)
     }
@@ -76,10 +97,12 @@ function App() {
     if (render.current === false) {
       render.current = true
     } else {
-      processLocations();
+      // processLocations();
       // getMapTest();
       // getPlaceTest()
+      console.log("useEffect control")
     }
+    
   });
 
   return (
