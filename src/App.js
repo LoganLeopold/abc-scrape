@@ -33,32 +33,17 @@ function App() {
         'http://localhost:3001/processLocations',
       );
 
-      // response.data.forEach( place => {
-      //   if (place.candidates.length > 0) console.log(place.candidates[0])
-      // })
-
-      // for (let i = 0; i < response.data.length; i++) {
-      //   const place = response.data[i]
-      //   if (place.candidates.length > 0) {
-      //     const marker = new googleObj.maps.Marker({
-      //       position: place.candidates[0].geometry.location,
-      //       label: "ABC",
-      //       map: map, 
-      //       clickable: true
-      //     });
-      //   }
-      // }
-
-
-      /*
-        Need add Markers here looping over response.data here
-      */ 
-        // const marker = new google.maps.Marker({
-        //   position: {lat: 38.81405480000001, lng: -77.0429216},
-        //   label: "ABC",
-        //   map: map, 
-        //   clickable: true
-        // });
+      for (let i = 0; i < response.data.length; i++) {
+        const place = response.data[i]
+        if (place.candidates.length > 0) {
+          const marker = new googleObj.maps.Marker({
+            position: place.candidates[0].geometry.location,
+            label: "ABC",
+            map: map, 
+            clickable: true
+          });
+        }
+      }
       console.log(response)
     } catch (error) {
       console.log(error)
