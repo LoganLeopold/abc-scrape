@@ -3,8 +3,9 @@ require('dotenv').config()
 const axios = require('axios');
 const jsdom = require("jsdom");
 const {Client: GoogleClient} = require("@googlemaps/google-maps-services-js");
-const {DistanceCalculator} = require('distance-calculator-js');
+var Distance = require('geo-distance');
 const { parse } = require('dotenv');
+const dummyData = require('./dummydata.json');
 
 const googleClient = new GoogleClient({})
 const { JSDOM } = jsdom;
@@ -50,6 +51,24 @@ const createGooglePlaces = async (addresses) => {
     return error 
   }
 }
+
+const dateFilterPlaces = (placeArr) => {
+  const homeLocation = {lat: 38.885474, lon: -76.992642} 
+  const closePlaces = placeArr.reduce((acc, curr, i) => {
+    if (curr.candidates.length > 0) {
+      let { lat, lng } = curr.candidates[0].geometry.location
+      let miles = Distance.between(
+        homeLocation,
+        {lat: lat, lon: lng}
+      ).human_readable('customary').distance
+      if (Number(miles) < 10) acc.push(curr);
+    }
+    return acc
+  },[])  
+ 
+  return closePlaces;
+}
+
 /*
   - Process the DOM 
   - Turn into locations/placeIds
@@ -59,21 +78,12 @@ app.get('/processLocations', async (req, res) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   console.log("processLocations")
   try {
-    let addresses = await parseList('https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html')
-    let places = await createGooglePlaces(addresses)
+    // let addresses = await parseList('https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html')
+    // let places = await createGooglePlaces(addresses)
+
+    const closePlaces = dateFilterPlaces(dummyData);
    
-    /*
-      For potentially filtering by distance
-    */
-      // let homeLocation = {lat: , long: }
-      // let closePlaces = places.reduce((acc, curr, i) => {
-      //   if (curr.candidates.length > 0) {
-      //     let { geometry: { location } } = curr.candidates[0]
-      //     let miles = DistanceCalculator.calculate({lat: location.lat, long: location.lng}, homeLocation, M)
-      //   }
-      //   return acc
-      // },[])
-    res.send(places)
+    res.json(closePlaces)
   } catch (err) {
     res.send(err)
   }

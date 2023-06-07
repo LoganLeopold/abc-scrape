@@ -33,9 +33,9 @@ function App() {
         'http://localhost:3001/processLocations',
       );
 
-      response.data.forEach( place => {
-        if (place.candidates.length > 0) console.log(place.candidates[0])
-      })
+      // response.data.forEach( place => {
+      //   if (place.candidates.length > 0) console.log(place.candidates[0])
+      // })
 
       // for (let i = 0; i < response.data.length; i++) {
       //   const place = response.data[i]
@@ -59,6 +59,7 @@ function App() {
         //   map: map, 
         //   clickable: true
         // });
+      console.log(response)
     } catch (error) {
       console.log(error)
     }
@@ -97,10 +98,10 @@ function App() {
     if (render.current === false) {
       render.current = true
     } else {
-      // processLocations();
+      processLocations();
       // getMapTest();
       // getPlaceTest()
-      console.log("useEffect control")
+      // console.log("useEffect control")
     }
     
   });
