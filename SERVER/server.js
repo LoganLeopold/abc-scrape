@@ -61,12 +61,30 @@ const dateFilterPlaces = (placeArr) => {
         homeLocation,
         {lat: lat, lon: lng}
       ).human_readable('customary').distance
-      if (Number(miles) < 10) acc.push(curr);
+      if (Number(miles) < 10) acc.push([miles, [lat, lng]]);
     }
     return acc
-  },[])  
- 
-  return closePlaces;
+  },[])
+  
+  const distanceSortedPlaces = closePlaces.sort((a,b) => a[0] - b[0]).map(place => place[1]);
+
+  
+  const destination = encodeURIComponent(distanceSortedPlaces[distanceSortedPlaces.length - 1]);
+
+  const waypoints = distanceSortedPlaces.reduce((acc, curr, i, arr) => {
+    [lat, long] = curr;
+    // if (i < arr.length - 2) {
+      acc += `${lat},${long}${i < arr.length - 1 ? '|' : ''}`;
+    // }
+    return acc;
+  }, '')
+
+  const encodedWaypoints = encodeURIComponent(waypoints);
+
+  const url = `https://www.google.com/maps/dir/?api=1&waypoints=${encodedWaypoints}`;
+
+  console.log(url)
+  return distanceSortedPlaces;
 }
 
 /*

@@ -35,14 +35,13 @@ function App() {
 
       for (let i = 0; i < response.data.length; i++) {
         const place = response.data[i]
-        if (place.candidates.length > 0) {
-          const marker = new googleObj.maps.Marker({
-            position: place.candidates[0].geometry.location,
-            label: "ABC",
-            map: map, 
-            clickable: true
-          });
-        }
+        console.log(place)
+        const marker = new googleObj.maps.Marker({
+          position: place.geometry.location,
+          label: "ABC",
+          map: map, 
+          clickable: true
+        });
       }
       console.log(response)
     } catch (error) {
