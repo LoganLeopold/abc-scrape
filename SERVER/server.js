@@ -99,6 +99,7 @@ const constructUrl = (filteredSortedPlaces) => {
   return url;
 }
 
+// https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html
 app.get('/processLocations', async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
