@@ -33,17 +33,17 @@ function App() {
         'http://localhost:3001/processLocations',
       );
 
-      for (let i = 0; i < response.data.length; i++) {
-        const place = response.data[i]
-        console.log(place)
-        const marker = new googleObj.maps.Marker({
-          position: place.geometry.location,
-          label: "ABC",
-          map: map, 
-          clickable: true
-        });
-      }
       console.log(response)
+      // for (let i = 0; i < response.data.length; i++) {
+      //   const place = response.data[i]
+      //   console.log(place)
+      //   const marker = new googleObj.maps.Marker({
+      //     position: place.geometry.location,
+      //     label: "ABC",
+      //     map: map, 
+      //     clickable: true
+      //   });
+      // }
     } catch (error) {
       console.log(error)
     }
