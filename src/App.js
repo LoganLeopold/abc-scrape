@@ -60,7 +60,6 @@ function App() {
     }
   }
 
-
   const getPlaceTest = async() => {
     console.log("placeTest")
     try {
@@ -83,9 +82,6 @@ function App() {
       render.current = true
     } else {
       processLocations();
-      // getMapTest();
-      // getPlaceTest()
-      // console.log("useEffect control")
     }
     
   });
