@@ -9,13 +9,15 @@ const dummyData = require('./dummydata.json');
 const googleClient = new GoogleClient({})
 const { JSDOM } = jsdom;
 const app = express();
-app.use((req,res,next) => {
-  req.headers["Access-Control-Allow-Origin"] =  "*";
-  req.headers["Access-Control-Allow-Headers"] =  "Origin, X-Requested-With, Content-Type, Accept";
-  req.headers["Access-Control-Allow-Methods"] = "POST";
-  next()
-})
 const port = 3001;
+
+app.use(express.json())
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  next();
+})
 
 // This function retrieves the ABC store list and creates addresses
 const parseList = async (listUrl) => {
@@ -100,27 +102,18 @@ const constructUrl = (filteredSortedPlaces) => {
 
   const url = `https://www.google.com/maps/dir/?api=1&waypoints=${waypoints}&waypoint_place_ids=${waypointIds}&destination=${urlDestination}&destination_place_id=${destinationPlaceId}`;
 
-  console.log(url);
-
   return url;
 }
 
 // https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html
 app.post('/processLocations', async (req, res) => {
-  // res.header("Access-Control-Allow-Origin", "*");
-  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  // res.header('Access-Control-Allow-Methods: POST')
   console.log("processLocations")
-  console.log(req)
-  // res.json({success: "success"})
   try {
-    // let addresses = await parseList('https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html')
-    
-    // let addresses = await parseList(req.body)
-    // let places = await createGooglePlaces(addresses)
-    // const closePlaces = distanceFilterPlaces(places)
-    // const finalUrl = constructUrl(closePlaces)
-    // res.json(finalUrl);
+    let addresses = await parseList(req.body.dropUrl)
+    let places = await createGooglePlaces(addresses)
+    const closePlaces = distanceFilterPlaces(places)
+    const finalUrl = constructUrl(closePlaces)
+    res.json(finalUrl);
   } catch (err) {
     res.send(err)
   }

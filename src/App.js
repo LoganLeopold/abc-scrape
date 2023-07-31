@@ -11,20 +11,19 @@ function App() {
     setDropUrl(e.target.value)
   }
 
+  const body = {
+    hannah: "Thomas"
+  }
+
   const processLocations = async () => {
     try {
       const response = await axios.post(
-        'http://localhost:3001/processLocations',
-        {
-          body: JSON.stringify(dropUrl),
-          headers: {
-            'Content-Type': 'application/json',
-            "Access-Control-Allow-Origin": "*",
-          }
-        }
+        'http://localhost:3001/processLocations', 
+        { dropUrl },
       );
       setListUrl(response.data)
-    } catch (error) {  
+      console.log(response)
+    } catch (error) {
       console.log(error)
     }
   }
