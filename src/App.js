@@ -13,11 +13,18 @@ function App() {
 
   const processLocations = async () => {
     try {
-      const response = await axios.get(
+      const response = await axios.post(
         'http://localhost:3001/processLocations',
+        {
+          body: JSON.stringify(dropUrl),
+          headers: {
+            'Content-Type': 'application/json',
+            "Access-Control-Allow-Origin": "*",
+          }
+        }
       );
       setListUrl(response.data)
-    } catch (error) {
+    } catch (error) {  
       console.log(error)
     }
   }

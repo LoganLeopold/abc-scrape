@@ -9,6 +9,12 @@ const dummyData = require('./dummydata.json');
 const googleClient = new GoogleClient({})
 const { JSDOM } = jsdom;
 const app = express();
+app.use((req,res,next) => {
+  req.headers["Access-Control-Allow-Origin"] =  "*";
+  req.headers["Access-Control-Allow-Headers"] =  "Origin, X-Requested-With, Content-Type, Accept";
+  req.headers["Access-Control-Allow-Methods"] = "POST";
+  next()
+})
 const port = 3001;
 
 // This function retrieves the ABC store list and creates addresses
@@ -100,16 +106,21 @@ const constructUrl = (filteredSortedPlaces) => {
 }
 
 // https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html
-app.get('/processLocations', async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+app.post('/processLocations', async (req, res) => {
+  // res.header("Access-Control-Allow-Origin", "*");
+  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  // res.header('Access-Control-Allow-Methods: POST')
   console.log("processLocations")
+  console.log(req)
+  // res.json({success: "success"})
   try {
-    let addresses = await parseList('https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html')
-    let places = await createGooglePlaces(addresses)
-    const closePlaces = distanceFilterPlaces(places)
-    const finalUrl = constructUrl(closePlaces)
-    res.json(finalUrl);
+    // let addresses = await parseList('https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html')
+    
+    // let addresses = await parseList(req.body)
+    // let places = await createGooglePlaces(addresses)
+    // const closePlaces = distanceFilterPlaces(places)
+    // const finalUrl = constructUrl(closePlaces)
+    // res.json(finalUrl);
   } catch (err) {
     res.send(err)
   }
