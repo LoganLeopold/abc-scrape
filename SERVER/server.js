@@ -134,21 +134,36 @@ const constructUrl = (filteredSortedPlaces) => {
   return url;
 }
 
+const withLocationData = async (req, res) => {
+  try {
+    const addresses = await parseList(req.body.dropUrl)
+    const places = await createGooglePlaces(addresses)
+    const currentLocation = await getCurrentLocationPlace(req.body.currentLocation)
+    const closePlaces = distanceFilterPlaces(places, currentLocation)
+    const finalUrl = constructUrl(closePlaces)
+    return finalUrl;
+  } catch (error) {
+    return error 
+  }
+}
+
+const withDefaultLocation = async (req, res) => {
+  try {
+    const addresses = await parseList(req.body.dropUrl)
+    const places = await createGooglePlaces(addresses)
+    const closePlaces = distanceFilterPlaces(places)
+    const finalUrl = constructUrl(closePlaces)
+    return finalUrl;
+  } catch (error) {
+    return error 
+  }
+}
 // https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html
 app.post('/processLocations', async (req, res) => {
   console.log("processLocations")
   try {
-    const addresses = await parseList(req.body.dropUrl)
-    const places = await createGooglePlaces(addresses)
-    let closePlaces;
-    if (req.body.currentLocation) {
-      const currentLocation = await getCurrentLocationPlace(req.body.currentLocation)
-      closePlaces = distanceFilterPlaces(places, currentLocation)
-    } else {
-      closePlaces = distanceFilterPlaces(places)
-    }
-    const finalUrl = constructUrl(closePlaces)
-    res.json(finalUrl);
+    const finalUrl = req.body.currentLocation ? await withLocationData(req, res) : await withDefaultLocation(req, res)
+    res.json(finalUrl)
   } catch (err) {
     res.send(err)
   }
