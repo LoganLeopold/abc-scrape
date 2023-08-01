@@ -1,10 +1,46 @@
+:root {
+  --color-primary-red: #E81E2F;
+  --color-primary-blue: #0063A4;
+}
+
+@font-face {
+  font-family: "Alfarn", sans-serif;
+  src: url("./fonts/Alfarn.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "gone";
+  src: local("youre gone"), url("./fonts/youre\ gone.otf") format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "gone";
+  src: local("youre gone it"), url("./fonts/youre\ gone it.otf") format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
+
 .App {
+  font-family: "gone", sans-serif;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  margin: 20% auto 0 auto;
+  max-width: 400px;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+h1 {
+  color: var(--color-primary-blue);
+  font-weight: bold;
 }
 
 @media (prefers-reduced-motion: no-preference) {

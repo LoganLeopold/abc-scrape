@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 import './App.css';
+import './fonts/youre gone.otf'
+import './fonts/youre gone it.otf'
 
 function App() {
   const [dropUrl, setDropUrl] = useState('')
@@ -9,10 +11,6 @@ function App() {
   const onUrlInputChange = (e) => {
     console.log(e.target.value, "CHANGE")
     setDropUrl(e.target.value)
-  }
-
-  const body = {
-    hannah: "Thomas"
   }
 
   const processLocations = async () => {
