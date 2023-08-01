@@ -76,7 +76,15 @@ h1 {
   width: 100vw;
 }
 
-input[name="drop_url"] {
+.form_label {
+  text-align: left;
+  font-size: 12px;
+  margin-bottom: 2px;
+  color: var(--color-primary-blue);
+  font-weight: bold;;
+}
+
+input[type="text"] {
   border: none;
   margin-bottom: 10px;
   padding: 10px;
@@ -88,7 +96,11 @@ input[name="drop_url"] {
   border-bottom: 1px solid rgba(0,0,0,0);
 }
 
-input[name="drop_url"]:focus {
+input[type="text"]:hover {
+  box-shadow: 0 0 10px 3px rgba(255,255,255,.4) inset;
+}
+
+input[type="text"]:focus {
   outline: none;
   background: white;
   color: var(--color-primary-blue);
@@ -97,7 +109,7 @@ input[name="drop_url"]:focus {
   padding-left: 0;
 }
 
-input[name="drop_url"]::placeholder {
+input[type="text"]::placeholder {
   color: white;
 }
 

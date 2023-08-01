@@ -7,17 +7,21 @@ import './fonts/youre gone it.otf'
 function App() {
   const [dropUrl, setDropUrl] = useState('')
   const [listUrl, setListUrl] = useState('')
+  const [currentLocation, setCurrentLocation] = useState('')
 
   const onUrlInputChange = (e) => {
-    console.log(e.target.value, "CHANGE")
     setDropUrl(e.target.value)
+  }
+
+  const onCurrentLocationChange = (e) => {
+    setCurrentLocation(e.target.value)
   }
 
   const processLocations = async () => {
     try {
       const response = await axios.post(
         'http://localhost:3001/processLocations', 
-        { dropUrl },
+        { dropUrl, currentLocation },
       );
       setListUrl(response.data)
       console.log(response)
@@ -39,7 +43,10 @@ function App() {
         <span class="title_animate">S</span>
         <span class="title_animate">T</span>
       </h1>
+      <label class="form_label">ABC's Drop URL</label>
       <input type="text" name="drop_url" placeholder='Drop Url:' onChange={onUrlInputChange}/>
+      <label class="form_label">Optional: Your Location (City, State)</label>
+      <input type="text" name="current_location" placeholder="E.g.: Richmond, VA" onChange={onCurrentLocationChange}/>
       <input type="submit" value="Submit" style={{display: 'block'}} onClick={processLocations}/>
       
       { 

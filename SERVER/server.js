@@ -59,11 +59,39 @@ const createGooglePlaces = async (addresses) => {
   }
 }
 
+const getCurrentLocationPlace = async (placeString) => {
+  try {
+    const currentLocation = await googleClient.findPlaceFromText({
+      params: {
+        key: process.env.GOOGLE_MAPS_KEY,
+        input: placeString,
+        inputtype: "textquery",
+        fields: ['geometry', 'place_id']
+      }
+    })
+    return currentLocation.data
+  } catch (error) {
+    return error
+  }
+}
+
 // Filter place by distance from home
-const distanceFilterPlaces = (placeArr) => {
-  const homeLocation = {lat: 38.885474, lon: -76.992642} 
+const distanceFilterPlaces = (placesCollection, currentLocation) => {
+  let currentLat;
+  let currentLon;
+  // If the user provided a current location
+  if (currentLocation) {
+    const currGeoObject = currentLocation.candidates[0].geometry.location
+    currentLat = currGeoObject.lat
+    currentLon = currGeoObject.lng
+  } else {
+    // Defaults to my street - dev bias *shrug*
+    currentLat = 38.8856842
+    currentLon = -76.9930121
+  }
+  const homeLocation = {lat: currentLat, lon: currentLon}
   // Find the close places
-  const closePlaces = placeArr.reduce((acc, curr, i) => {
+  const closePlaces = placesCollection.reduce((acc, curr, i) => {
     if (curr.candidates.length > 0) {
       let { lat, lng } = curr.candidates[0].geometry.location
       let miles = Distance.between(
@@ -84,6 +112,7 @@ const distanceFilterPlaces = (placeArr) => {
 
 // Make final usable URL
 const constructUrl = (filteredSortedPlaces) => {
+  // This block establishes last filteredSortedPlace as destination
   const { 
     geometry: {location: { lat: destinationLat, lng: destinationLng }}, place_id: destinationPlaceId 
   } = filteredSortedPlaces[filteredSortedPlaces.length - 1].candidates[0];
@@ -109,9 +138,15 @@ const constructUrl = (filteredSortedPlaces) => {
 app.post('/processLocations', async (req, res) => {
   console.log("processLocations")
   try {
-    let addresses = await parseList(req.body.dropUrl)
-    let places = await createGooglePlaces(addresses)
-    const closePlaces = distanceFilterPlaces(places)
+    const addresses = await parseList(req.body.dropUrl)
+    const places = await createGooglePlaces(addresses)
+    let closePlaces;
+    if (req.body.currentLocation) {
+      const currentLocation = await getCurrentLocationPlace(req.body.currentLocation)
+      closePlaces = distanceFilterPlaces(places, currentLocation)
+    } else {
+      closePlaces = distanceFilterPlaces(places)
+    }
     const finalUrl = constructUrl(closePlaces)
     res.json(finalUrl);
   } catch (err) {
