@@ -24,8 +24,14 @@
   font-style: italic;
 }
 
+@font-face {
+  font-family: "library";
+  src: local("Library 3 am"), url("./fonts/Library\ 3\ am.otf") format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .App {
-  font-family: "gone", sans-serif;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -41,6 +47,7 @@
 h1 {
   color: var(--color-primary-blue);
   font-weight: bold;
+  font-family: 'library';
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -67,6 +74,21 @@ h1 {
 .enable-view { 
   height: 100vh;
   width: 100vw;
+}
+
+input[name="drop_url"] {
+  border: none;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(0,0,0,0);
+}
+
+input[name="drop_url"]:focus {
+  outline: none;
+  border-bottom: 1px solid black;
+}
+
+.title_animate:hover {
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
 }
 
 @keyframes App-logo-spin {
