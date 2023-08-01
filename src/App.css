@@ -79,12 +79,37 @@ h1 {
 input[name="drop_url"] {
   border: none;
   margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+  background: var(--color-primary-blue);
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
   border-bottom: 1px solid rgba(0,0,0,0);
 }
 
 input[name="drop_url"]:focus {
   outline: none;
+  background: white;
+  color: var(--color-primary-blue);
   border-bottom: 1px solid black;
+  border-radius: 0;
+  padding-left: 0;
+}
+
+input[name="drop_url"]::placeholder {
+  color: white;
+}
+
+input[type="submit"] {
+  display: block;
+  border: 2px solid var(--color-primary-blue);
+  border-radius: 6px;
+  padding: 10px;
+  color: var(--color-primary-blue);
+  background: white;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 .title_animate:hover {

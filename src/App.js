@@ -39,7 +39,7 @@ function App() {
         <span class="title_animate">S</span>
         <span class="title_animate">T</span>
       </h1>
-      <input type="text" name="drop_url" onChange={onUrlInputChange}/>
+      <input type="text" name="drop_url" placeholder='Drop Url:' onChange={onUrlInputChange}/>
       <input type="submit" value="Submit" style={{display: 'block'}} onClick={processLocations}/>
       
       { 
