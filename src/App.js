@@ -47,7 +47,7 @@ function App() {
       <input type="text" name="drop_url" placeholder='Drop Url:' onChange={onUrlInputChange}/>
       <label class="form_label">Optional: Your Location (City, State)</label>
       <input type="text" name="current_location" placeholder="E.g.: Richmond, VA" onChange={onCurrentLocationChange}/>
-      <input type="submit" value="Submit" style={{display: 'block'}} onClick={processLocations}/>
+      <input type="submit" value="Submit" onClick={processLocations}/>
       
       { 
         listUrl &&
