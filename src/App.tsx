@@ -3,11 +3,13 @@ import axios from 'axios';
 import './App.css';
 import './fonts/youre gone.otf'
 import './fonts/youre gone it.otf'
+import { DistanceCalcCoordStructure, ProcessLocationsRequest } from '../types';
 
 function App() {
   const [dropUrl, setDropUrl] = useState('')
   const [listUrl, setListUrl] = useState('')
   const [currentLocation, setCurrentLocation] = useState('')
+  const [currentLocationCoords, setCurrentLocationCoords] = useState<>({})
 
   const onUrlInputChange = (e) => {
     setDropUrl(e.target.value)
@@ -18,10 +20,15 @@ function App() {
   }
 
   const processLocations = async () => {
+    const payload = {}
+    [dropUrl, currentLocation, currentLocation]
     try {
       const response = await axios.post(
         'http://localhost:3001/processLocations', 
-        { dropUrl, currentLocation },
+        { 
+          dropUrl, 
+          currentLocation 
+        } as ProcessLocationsRequest,
       );
       setListUrl(response.data)
       console.log(response)
