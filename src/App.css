@@ -124,6 +124,10 @@ input[type="submit"] {
   font-size: 16px;
 }
 
+input[type="submit"][disabled] {
+  opacity: .5;
+}
+
 .title_animate:hover {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
 }
