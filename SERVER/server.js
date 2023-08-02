@@ -11,6 +11,14 @@ const { JSDOM } = jsdom;
 const app = express();
 const port = 3001;
 
+app.use(express.json())
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  next();
+})
+
 // This function retrieves the ABC store list and creates addresses
 const parseList = async (listUrl) => {
   try {
@@ -51,11 +59,39 @@ const createGooglePlaces = async (addresses) => {
   }
 }
 
+const getCurrentLocationPlace = async (placeString) => {
+  try {
+    const currentLocation = await googleClient.findPlaceFromText({
+      params: {
+        key: process.env.GOOGLE_MAPS_KEY,
+        input: placeString,
+        inputtype: "textquery",
+        fields: ['geometry', 'place_id']
+      }
+    })
+    return currentLocation.data
+  } catch (error) {
+    return error
+  }
+}
+
 // Filter place by distance from home
-const distanceFilterPlaces = (placeArr) => {
-  const homeLocation = {lat: 38.885474, lon: -76.992642} 
+const distanceFilterPlaces = (placesCollection, currentLocation) => {
+  let currentLat;
+  let currentLon;
+  // If the user provided a current location
+  if (currentLocation) {
+    const currGeoObject = currentLocation.candidates[0].geometry.location
+    currentLat = currGeoObject.lat
+    currentLon = currGeoObject.lng
+  } else {
+    // Defaults to my street - dev bias *shrug*
+    currentLat = 38.8856842
+    currentLon = -76.9930121
+  }
+  const homeLocation = {lat: currentLat, lon: currentLon}
   // Find the close places
-  const closePlaces = placeArr.reduce((acc, curr, i) => {
+  const closePlaces = placesCollection.reduce((acc, curr, i) => {
     if (curr.candidates.length > 0) {
       let { lat, lng } = curr.candidates[0].geometry.location
       let miles = Distance.between(
@@ -76,6 +112,7 @@ const distanceFilterPlaces = (placeArr) => {
 
 // Make final usable URL
 const constructUrl = (filteredSortedPlaces) => {
+  // This block establishes last filteredSortedPlace as destination
   const { 
     geometry: {location: { lat: destinationLat, lng: destinationLng }}, place_id: destinationPlaceId 
   } = filteredSortedPlaces[filteredSortedPlaces.length - 1].candidates[0];
@@ -94,21 +131,44 @@ const constructUrl = (filteredSortedPlaces) => {
 
   const url = `https://www.google.com/maps/dir/?api=1&waypoints=${waypoints}&waypoint_place_ids=${waypointIds}&destination=${urlDestination}&destination_place_id=${destinationPlaceId}`;
 
-  console.log(url);
-
   return url;
 }
 
-app.get('/processLocations', async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  console.log("processLocations")
+const withLocationData = async (req, res) => {
   try {
-    let addresses = await parseList('https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html')
-    let places = await createGooglePlaces(addresses)
+    const addresses = await parseList(req.body.dropUrl)
+    const places = await createGooglePlaces(addresses)
+    const currentLocation = await getCurrentLocationPlace(req.body.currentLocation)
+    const closePlaces = distanceFilterPlaces(places, currentLocation)
+    const finalUrl = constructUrl(closePlaces)
+    return finalUrl;
+  } catch (error) {
+    return error 
+  }
+}
+
+const withDefaultLocation = async (req, res) => {
+  try {
+    const addresses = await parseList(req.body.dropUrl)
+    const places = await createGooglePlaces(addresses)
     const closePlaces = distanceFilterPlaces(places)
     const finalUrl = constructUrl(closePlaces)
-    res.json(finalUrl);
+    return finalUrl;
+  } catch (error) {
+    return error 
+  }
+}
+// https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html
+app.post('/processLocations', async (req, res) => {
+  console.log("processLocations")
+  /*
+    Home location is best because that is the ~filter~ location, not the Google Maps starting point for the journey. 
+    The starting point defaults in the maps. The location does not. 
+    We should give the URL the starting point if it's defined. 
+  */
+  try {
+    const finalUrl = req.body.currentLocation ? await withLocationData(req, res) : await withDefaultLocation(req, res)
+    res.json(finalUrl)
   } catch (err) {
     res.send(err)
   }

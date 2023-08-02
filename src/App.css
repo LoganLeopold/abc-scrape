@@ -1,10 +1,53 @@
+:root {
+  --color-primary-red: #E81E2F;
+  --color-primary-blue: #0063A4;
+}
+
+@font-face {
+  font-family: "Alfarn", sans-serif;
+  src: url("./fonts/Alfarn.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "gone";
+  src: local("youre gone"), url("./fonts/youre\ gone.otf") format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "gone";
+  src: local("youre gone it"), url("./fonts/youre\ gone it.otf") format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "library";
+  src: local("Library 3 am"), url("./fonts/Library\ 3\ am.otf") format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  margin: 20% auto 0 auto;
+  max-width: 400px;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+h1 {
+  color: var(--color-primary-blue);
+  font-weight: bold;
+  font-family: 'library';
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -31,6 +74,58 @@
 .enable-view { 
   height: 100vh;
   width: 100vw;
+}
+
+.form_label {
+  text-align: left;
+  font-size: 12px;
+  margin-bottom: 2px;
+  color: var(--color-primary-blue);
+  font-weight: bold;;
+}
+
+input[type="text"] {
+  border: none;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+  background: var(--color-primary-blue);
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  border-bottom: 1px solid rgba(0,0,0,0);
+}
+
+input[type="text"]:hover {
+  box-shadow: 0 0 10px 3px rgba(255,255,255,.4) inset;
+}
+
+input[type="text"]:not(:placeholder-shown), input[type="text"]:focus {
+  outline: none;
+  background: white;
+  color: var(--color-primary-blue);
+  border-bottom: 1px solid black;
+  border-radius: 0;
+  padding-left: 0;
+}
+
+input[type="text"]::placeholder {
+  color: white;
+}
+
+input[type="submit"] {
+  display: block;
+  border: 2px solid var(--color-primary-blue);
+  border-radius: 6px;
+  padding: 10px;
+  color: var(--color-primary-blue);
+  background: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.title_animate:hover {
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
 }
 
 @keyframes App-logo-spin {
