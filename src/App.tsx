@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css';
 import './fonts/youre gone.otf'
@@ -33,19 +33,19 @@ function App() {
   return (
     <div className="App enable-view">
       <h1>
-        <span class="title_animate">A</span>
-        <span class="title_animate">B</span>
-        <span class="title_animate">C </span>
-        <span class="title_animate">A</span>
-        <span class="title_animate">S</span>
-        <span class="title_animate">S</span>
-        <span class="title_animate">I</span>
-        <span class="title_animate">S</span>
-        <span class="title_animate">T</span>
+        <span className="title_animate">A</span>
+        <span className="title_animate">B</span>
+        <span className="title_animate">C </span>
+        <span className="title_animate">A</span>
+        <span className="title_animate">S</span>
+        <span className="title_animate">S</span>
+        <span className="title_animate">I</span>
+        <span className="title_animate">S</span>
+        <span className="title_animate">T</span>
       </h1>
-      <label class="form_label">ABC's Drop URL</label>
+      <label className="form_label">ABC's Drop URL</label>
       <input type="text" name="drop_url" placeholder='Drop Url:' onChange={onUrlInputChange}/>
-      <label class="form_label">Optional: Your Location (City, State)</label>
+      <label className="form_label">Optional: Your Location (City, State)</label>
       <input type="text" name="current_location" placeholder="E.g.: Richmond, VA" onChange={onCurrentLocationChange}/>
       <input type="submit" value="Submit" onClick={processLocations}/>
       
