@@ -113,19 +113,26 @@ input[type="text"]::placeholder {
   color: white;
 }
 
-input[type="submit"] {
+input[type="submit"], button {
   display: block;
+  margin: 5px 0;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background: white;
   border: 2px solid var(--color-primary-blue);
   border-radius: 6px;
-  padding: 10px;
   color: var(--color-primary-blue);
-  background: white;
-  font-weight: bold;
-  font-size: 16px;
+  cursor: pointer;
 }
 
 input[type="submit"][disabled] {
   opacity: .5;
+}
+
+input[type="submit"]:hover, button:hover {
+  background-color: var(--color-primary-blue);
+  color: white;
 }
 
 .title_animate:hover {

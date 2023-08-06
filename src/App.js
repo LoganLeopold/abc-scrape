@@ -10,6 +10,7 @@ function App() {
   const [currentLocation, setCurrentLocation] = useState('')
   const [currentCoords, setCurrentCoords] = useState({lat: 0, lng: 0})
   const [submitDisabled, setSubmitDisabled] = useState(false)
+  const [locationMethod, setLocationMethod] = useState('')
 
   const geoLocateSuccess = (data) => {
     console.log(data.coords)
@@ -75,10 +76,24 @@ function App() {
       <label className="form_label">ABC's Drop URL</label>
       <input type="text" name="drop_url" placeholder='Drop Url:' onChange={onUrlInputChange}/>
       <h2>Options:</h2>
-      <label className="form_label">Written Location (City, State)</label>
-      <input type="text" name="current_location" placeholder="E.g.: Richmond, VA" onChange={onCurrentLocationChange}/>
-      {/* <label className="form_label">Use your location (from browser permission)</label> */}
-      <input type="submit" value="Use your location" onClick={onGeoLocation}/>  
+      { locationMethod.length < 1 && (
+        <>
+          <button onClick={() => setLocationMethod('written')}>Written City, State</button>
+          <button onClick={() => setLocationMethod('geolocation')}>Use Your Current Location</button>
+        </>
+      )}
+      { locationMethod === 'written' && (
+        <>
+          <label className="form_label">Written Location (City, State)</label>
+          <input type="text" name="current_location" placeholder="E.g.: Richmond, VA" onChange={onCurrentLocationChange}/>
+        </>
+      )}
+      { locationMethod === 'geolocation' && 
+          <input type="submit" value="Use your location" onClick={onGeoLocation}/> 
+      }
+      { locationMethod.length > 0 &&
+          <button onClick={() => setLocationMethod('')}>{'<-- Pick a different method'}</button>
+      }
       <input type="submit" value="Submit" onClick={processLocations} disabled={submitDisabled}/>
       { 
         listUrl &&
