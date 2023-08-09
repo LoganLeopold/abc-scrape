@@ -93,7 +93,7 @@ button.back {
   border-bottom: 1px solid rgba(0,0,0,0);
 }
 
-.form_input:not(:placeholder-shown), .form_input:focus {
+/* .form_input:not(:placeholder-shown), .form_input:focus {
   outline: none;
   background: white;
   color: var(--color-primary-blue);
@@ -101,11 +101,16 @@ button.back {
   border-radius: 0;
   padding-left: 0;
   box-shadow: none;
-}
+} */
 
 .form_input::placeholder {
   color: white;
   font-style: italic;
+  opacity: .6;
+} 
+
+.form_input:focus::placeholder {
+  opacity: 0;
 }
 
 .form_label {
@@ -133,6 +138,7 @@ h2 {
 
 .input_group {
   position: relative;
+  display: flex;
 }
 
 input[type="submit"], button {
