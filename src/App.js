@@ -73,9 +73,11 @@ function App() {
         <span className="title_animate">S</span>
         <span className="title_animate">T</span>
       </h1>
-      <label className="form_label">ABC's Drop URL</label>
-      <input type="text" name="drop_url" placeholder='Drop Url:' onChange={onUrlInputChange}/>
-      <h2>Options:</h2>
+      <div className='input_group'>
+        <input className="form_input" type="text" name="drop_url" placeholder='Drop Url:' onChange={onUrlInputChange}/>
+        <label className="form_label">ABC's Drop URL</label>
+      </div>
+      <h2>Determine your search area:</h2>
       { locationMethod.length < 1 && (
         <>
           <button onClick={() => setLocationMethod('written')}>Written City, State</button>
@@ -83,22 +85,25 @@ function App() {
         </>
       )}
       { locationMethod === 'written' && (
-        <>
+        <div class="input_group">
+          <input className="form_input" type="text" name="current_location" placeholder='e.g. Richmond, VA' onChange={onCurrentLocationChange}/>
           <label className="form_label">Written Location (City, State)</label>
-          <input type="text" name="current_location" placeholder="E.g.: Richmond, VA" onChange={onCurrentLocationChange}/>
-        </>
+        </div>
       )}
       { locationMethod === 'geolocation' && 
           <input type="submit" value="Use your location" onClick={onGeoLocation}/> 
       }
       { locationMethod.length > 0 &&
-          <button onClick={() => setLocationMethod('')}>{'<-- Pick a different method'}</button>
+          <button onClick={() => setLocationMethod('')} className='back'>{'<-- Pick a different method'}</button>
       }
-      <input type="submit" value="Submit" onClick={processLocations} disabled={submitDisabled}/>
-      { 
-        listUrl &&
-          <a href={listUrl} target='_blank' rel="noreferrer">Click for Directions</a>
-      }
+      <div class="submission">
+        {/* <h2>Submit information</h2> */}
+        <input type="submit" value="Get My link" onClick={processLocations} disabled={submitDisabled}/>
+        { 
+          listUrl &&
+            <a href={listUrl} target='_blank' rel="noreferrer">Click for Directions</a>
+        }
+      </div>
     </div>
   );
 }

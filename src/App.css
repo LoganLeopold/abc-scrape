@@ -35,7 +35,7 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  margin: 20% auto 0 auto;
+  margin: 75px auto 0 auto;
   max-width: 400px;
 }
 
@@ -71,24 +71,21 @@ h1 {
   color: #61dafb;
 }
 
+button.back {
+  border: none;
+}
+
 .enable-view { 
   height: 100vh;
   width: 100vw;
 }
 
-.form_label {
-  text-align: left;
-  font-size: 12px;
-  margin-bottom: 2px;
-  color: var(--color-primary-blue);
-  font-weight: bold;;
-}
-
-input[type="text"] {
+.form_input {
+  width: 100%;
   border: none;
   margin-bottom: 10px;
-  padding: 10px;
-  font-size: 16px;
+  padding: 23px 10px 10px 15px;
+  font-size: 17px;
   background: var(--color-primary-blue);
   color: white;
   font-weight: bold;
@@ -96,21 +93,46 @@ input[type="text"] {
   border-bottom: 1px solid rgba(0,0,0,0);
 }
 
-input[type="text"]:hover {
-  box-shadow: 0 0 10px 3px rgba(255,255,255,.4) inset;
-}
-
-input[type="text"]:not(:placeholder-shown), input[type="text"]:focus {
+.form_input:not(:placeholder-shown), .form_input:focus {
   outline: none;
   background: white;
   color: var(--color-primary-blue);
   border-bottom: 1px solid black;
   border-radius: 0;
   padding-left: 0;
+  box-shadow: none;
 }
 
-input[type="text"]::placeholder {
+.form_input::placeholder {
   color: white;
+  font-style: italic;
+}
+
+.form_label {
+  position: absolute;
+  left: 6px;
+  top: 5px;
+  margin-bottom: 2px;
+  font-size: 10px;
+  text-align: left;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 1px 7px rgba(0,0,0,0.35);
+}
+
+.form_input:focus + .form_label {
+  left: 0;
+  color: black; 
+  text-shadow: none;
+}
+
+h2 {
+  font-size: 20px;
+  color: var(--color-primary-blue);
+}
+
+.input_group {
+  position: relative;
 }
 
 input[type="submit"], button {
@@ -133,6 +155,11 @@ input[type="submit"][disabled] {
 input[type="submit"]:hover, button:hover {
   background-color: var(--color-primary-blue);
   color: white;
+}
+
+.submission {
+  display: flex;
+  flex-direction: column;
 }
 
 .title_animate:hover {
