@@ -16,6 +16,7 @@ function App() {
     console.log(data.coords)
     const { latitude, longitude } = data.coords
     setSubmitDisabled(false)
+    if (currentLocation) { setCurrentLocation('') }
   }
 
   const geoLocateError = (error) => {
@@ -25,6 +26,7 @@ function App() {
 
   const onCurrentLocationChange = (e) => {
     setCurrentLocation(e.target.value)
+    if (currentCoords) { setCurrentCoords({lat: 0, lng: 0}) }
   }
 
   const onGeoLocation = (e) => {
@@ -45,6 +47,7 @@ function App() {
     } else if (currentLocation.length > 0) {
       payload['currentLocation'] = currentLocation
     } else {
+      setLocationMethod('init')
       return 
     }
 
@@ -76,12 +79,13 @@ function App() {
       <div className='input_group'>
         <input className="form_input" type="text" name="drop_url" placeholder='Drop Url Goes Here' onChange={onUrlInputChange}/>
       </div>
+
       {locationMethod === "init" &&
         <>
           <h2>Determine your search area:</h2>
           <div className='location_method'>
-            <button onClick={() => setLocationMethod('written')}>Use Written Location</button>
-            <button onClick={() => setLocationMethod('geolocation')}>Use Your Current Location</button>
+            <button onClick={() => setLocationMethod('written')}>Typed City, State</button>
+            <button onClick={() => setLocationMethod('geolocation')}>Use Current Location</button>
           </div>
         </>
       }
@@ -100,6 +104,7 @@ function App() {
           <button onClick={() => setLocationMethod('init')} className='back'>{'< Pick a different method'}</button>
         </>
       }
+
       <div className="submission">
         <input type="submit" value="Get My link" onClick={processLocations} disabled={submitDisabled}/>
         { 

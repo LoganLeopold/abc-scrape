@@ -154,7 +154,7 @@ input[type="submit"]:hover {
 
 .location_method {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
 
   & button {
     width: auto;
