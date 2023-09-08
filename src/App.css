@@ -73,6 +73,11 @@ h1 {
 
 button.back {
   border: none;
+  margin-top: 5px;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .enable-view { 
@@ -81,54 +86,31 @@ button.back {
 }
 
 .form_input {
-  width: 100%;
+  width: calc(100% - 16px);
   border: none;
-  margin-bottom: 10px;
-  padding: 23px 10px 10px 15px;
+  padding: 10px 10px 10px 6px;
   font-size: 17px;
-  background: var(--color-primary-blue);
-  color: white;
-  font-weight: bold;
+  background-color: var(--color-primary-blue);
   border-radius: 6px;
-  border-bottom: 1px solid rgba(0,0,0,0);
-}
-
-/* .form_input:not(:placeholder-shown), .form_input:focus {
   outline: none;
-  background: white;
-  color: var(--color-primary-blue);
-  border-bottom: 1px solid black;
-  border-radius: 0;
-  padding-left: 0;
-  box-shadow: none;
-} */
-
-.form_input::placeholder {
   color: white;
-  font-style: italic;
-  opacity: .6;
-} 
 
-.form_input:focus::placeholder {
-  opacity: 0;
+  &::placeholder {
+    color: white;
+    font-style: italic;
+    font-weight: bold;
+    opacity: .8;
+  }
+
+  &:focus::placeholder {
+    opacity: 0;
+  }
 }
 
-.form_label {
-  position: absolute;
-  left: 6px;
-  top: 5px;
-  margin-bottom: 2px;
-  font-size: 10px;
-  text-align: left;
-  font-weight: bold;
-  color: white;
-  text-shadow: 2px 1px 7px rgba(0,0,0,0.35);
-}
-
-.form_input:focus + .form_label {
-  left: 0;
-  color: black; 
-  text-shadow: none;
+input.form_input:auto-fill,
+input.form_input:-webkit-autofill:focus {
+  font-size: 17px !important;
+  background-color: var(--color-primary-blue) !important;
 }
 
 h2 {
@@ -137,13 +119,20 @@ h2 {
 }
 
 .input_group {
+  width: 100%;
   position: relative;
   display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+
+  &:empty {
+    display: none;
+  }
 }
 
 input[type="submit"], button {
   display: block;
-  margin: 5px 0;
+  width: 100%;
   padding: 10px;
   font-size: 16px;
   font-weight: bold;
@@ -158,25 +147,27 @@ input[type="submit"][disabled] {
   opacity: .5;
 }
 
-input[type="submit"]:hover, button:hover {
+input[type="submit"]:hover {
   background-color: var(--color-primary-blue);
   color: white;
+}
+
+.location_method {
+  display: flex;
+  justify-content: space-between;
+
+  & button {
+    width: auto;
+    font-size: 14px;
+  }
 }
 
 .submission {
   display: flex;
   flex-direction: column;
+  margin-top: 50px;
 }
 
 .title_animate:hover {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

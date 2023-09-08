@@ -10,7 +10,7 @@ function App() {
   const [currentLocation, setCurrentLocation] = useState('')
   const [currentCoords, setCurrentCoords] = useState({lat: 0, lng: 0})
   const [submitDisabled, setSubmitDisabled] = useState(false)
-  const [locationMethod, setLocationMethod] = useState('')
+  const [locationMethod, setLocationMethod] = useState('init')
 
   const geoLocateSuccess = (data) => {
     console.log(data.coords)
@@ -74,30 +74,33 @@ function App() {
         <span className="title_animate">T</span>
       </h1>
       <div className='input_group'>
-        <input className="form_input" type="text" name="drop_url" placeholder='Drop Url:' onChange={onUrlInputChange}/>
-        <label className="form_label">ABC's Drop URL</label>
+        <input className="form_input" type="text" name="drop_url" placeholder='Drop Url Goes Here' onChange={onUrlInputChange}/>
       </div>
-      <h2>Determine your search area:</h2>
-      { locationMethod.length < 1 && (
+      {locationMethod === "init" &&
         <>
-          <button onClick={() => setLocationMethod('written')}>Written City, State</button>
-          <button onClick={() => setLocationMethod('geolocation')}>Use Your Current Location</button>
+          <h2>Determine your search area:</h2>
+          <div className='location_method'>
+            <button onClick={() => setLocationMethod('written')}>Use Written Location</button>
+            <button onClick={() => setLocationMethod('geolocation')}>Use Your Current Location</button>
+          </div>
         </>
-      )}
-      { locationMethod === 'written' && (
-        <div class="input_group">
-          <input className="form_input" type="text" name="current_location" placeholder='e.g. Richmond, VA' onChange={onCurrentLocationChange}/>
-          <label className="form_label">Written Location (City, State)</label>
-        </div>
-      )}
+      }
+
+      <div className="input_group">
+        {locationMethod === 'written' && (
+          <>
+            <input className="form_input" type="text" name="current_location" placeholder='City, State' onChange={onCurrentLocationChange}/>
+            <button onClick={() => setLocationMethod('init')} className='back'>{'< Pick a different method'}</button>
+          </>
+        )}
+      </div>
       { locationMethod === 'geolocation' && 
-          <input type="submit" value="Use your location" onClick={onGeoLocation}/> 
+        <>
+          <input type="submit" value="Fetch Location >" onClick={onGeoLocation}/> 
+          <button onClick={() => setLocationMethod('init')} className='back'>{'< Pick a different method'}</button>
+        </>
       }
-      { locationMethod.length > 0 &&
-          <button onClick={() => setLocationMethod('')} className='back'>{'<-- Pick a different method'}</button>
-      }
-      <div class="submission">
-        {/* <h2>Submit information</h2> */}
+      <div className="submission">
         <input type="submit" value="Get My link" onClick={processLocations} disabled={submitDisabled}/>
         { 
           listUrl &&
