@@ -35,7 +35,7 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  margin: 20% auto 0 auto;
+  margin: 75px auto 0 auto;
   max-width: 400px;
 }
 
@@ -71,68 +71,103 @@ h1 {
   color: #61dafb;
 }
 
+button.back {
+  border: none;
+  margin-top: 5px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .enable-view { 
   height: 100vh;
   width: 100vw;
 }
 
-.form_label {
-  text-align: left;
-  font-size: 12px;
-  margin-bottom: 2px;
-  color: var(--color-primary-blue);
-  font-weight: bold;;
+.form_input {
+  width: calc(100% - 16px);
+  border: none;
+  padding: 10px 10px 10px 6px;
+  font-size: 17px;
+  background-color: var(--color-primary-blue);
+  border-radius: 6px;
+  outline: none;
+  color: white;
+
+  &::placeholder {
+    color: white;
+    font-style: italic;
+    font-weight: bold;
+    opacity: .8;
+  }
+
+  &:focus::placeholder {
+    opacity: 0;
+  }
 }
 
-input[type="text"] {
-  border: none;
-  margin-bottom: 10px;
+input.form_input:auto-fill,
+input.form_input:-webkit-autofill:focus {
+  font-size: 17px !important;
+  background-color: var(--color-primary-blue) !important;
+}
+
+h2 {
+  font-size: 20px;
+  color: var(--color-primary-blue);
+}
+
+.input_group {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+
+  &:empty {
+    display: none;
+  }
+}
+
+input[type="submit"], button {
+  display: block;
+  width: 100%;
   padding: 10px;
   font-size: 16px;
-  background: var(--color-primary-blue);
-  color: white;
   font-weight: bold;
-  border-radius: 6px;
-  border-bottom: 1px solid rgba(0,0,0,0);
-}
-
-input[type="text"]:hover {
-  box-shadow: 0 0 10px 3px rgba(255,255,255,.4) inset;
-}
-
-input[type="text"]:not(:placeholder-shown), input[type="text"]:focus {
-  outline: none;
   background: white;
-  color: var(--color-primary-blue);
-  border-bottom: 1px solid black;
-  border-radius: 0;
-  padding-left: 0;
-}
-
-input[type="text"]::placeholder {
-  color: white;
-}
-
-input[type="submit"] {
-  display: block;
   border: 2px solid var(--color-primary-blue);
   border-radius: 6px;
-  padding: 10px;
   color: var(--color-primary-blue);
-  background: white;
-  font-weight: bold;
-  font-size: 16px;
+  cursor: pointer;
+}
+
+input[type="submit"][disabled] {
+  opacity: .5;
+}
+
+input[type="submit"]:hover {
+  background-color: var(--color-primary-blue);
+  color: white;
+}
+
+.location_method {
+  display: flex;
+  justify-content: space-between;
+
+  & button {
+    width: auto;
+    font-size: 14px;
+  }
+}
+
+.submission {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
 }
 
 .title_animate:hover {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
