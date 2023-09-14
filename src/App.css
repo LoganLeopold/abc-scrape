@@ -35,13 +35,35 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  margin: 75px auto 0 auto;
+  margin: 20px auto 0 auto;
   max-width: 400px;
+  padding: 0 10px;
+
+  @media screen and (min-width: 568px) {
+    margin-top: 75px;
+  }
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+a {
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background: white;
+  border: 2px solid var(--color-primary-blue);
+  border-radius: 6px;
+  color: var(--color-primary-blue);
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background-color: var(--color-primary-blue);
+    color: white;
+  }
 }
 
 h1 {
@@ -108,14 +130,22 @@ button.back {
 }
 
 input.form_input:auto-fill,
+input.form_input:-webkit-autofill, 
 input.form_input:-webkit-autofill:focus {
   font-size: 17px !important;
   background-color: var(--color-primary-blue) !important;
+  color: white !important;
 }
 
 h2 {
   font-size: 20px;
   color: var(--color-primary-blue);
+  text-align: left;
+}
+
+h3 {
+  font-size: 18px;
+  /* background-color: var(--color-primary-blue); */
 }
 
 .input_group {
@@ -154,18 +184,23 @@ input[type="submit"]:hover {
 
 .location_method {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
 
   & button {
     width: auto;
     font-size: 14px;
+
+    &:hover, &:active {
+      background-color: var(--color-primary-blue);
+      color: white;
+    }
   }
 }
 
 .submission {
   display: flex;
   flex-direction: column;
-  margin-top: 50px;
+  margin-top: 35px;
 }
 
 .title_animate:hover {
