@@ -160,7 +160,7 @@ const withDefaultLocation = async (req, res) => {
 }
 // https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html
 app.post('/processLocations', async (req, res) => {
-  console.log("processLocations"))
+  console.log("processLocations")
   /*
     Home location is best because that is the ~filter~ location, not the Google Maps starting point for the journey. 
     The starting point defaults in the maps. The location does not. 
