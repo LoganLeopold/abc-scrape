@@ -77,13 +77,6 @@ function App() {
   }
 
   const reset = () => {
-    // const [dropUrl, setDropUrl] = useState('')
-    // const [listUrl, setListUrl] = useState('')
-    // const [currentLocation, setCurrentLocation] = useState('')
-    // const [currentCoords, setCurrentCoords] = useState({})
-    // const [submitDisabled, setSubmitDisabled] = useState(true)
-    // const [locationMethod, setLocationMethod] = useState('')
-
     setDropUrl('')
     setListUrl('')
     setCurrentCoords('')
@@ -107,7 +100,7 @@ function App() {
       <form id="link_submit" ref={formRef}>
         <div className='input_group'>
           <h2>1. Place the latest drop url:</h2>
-          <input className="form_input" type="text" name="drop_url" placeholder='Drop Url Goes Here' onChange={onUrlInputChange} htmlFor="link_submit" required/>
+          <input className="form_input" type="text" name="drop_url" placeholder='Drop Url Goes Here' onChange={onUrlInputChange} htmlFor="link_submit" required value={dropUrl}/>
         </div>
 
         <h2>2. Choose search area.</h2>
@@ -152,7 +145,7 @@ function App() {
             listUrl &&
               <>
                 <a href={listUrl} target='_blank' rel="noreferrer">{'> Click for Directions <'}</a>
-                <button className='reset_process' onClick={() => {}}>{'<< Start Over'}</button>
+                <button className='reset_process' onClick={() => {reset()}}>{'<< Start Over'}</button>
               </>
           }
         </div>
