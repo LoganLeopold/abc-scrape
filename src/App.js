@@ -77,12 +77,12 @@ function App() {
   }
 
   const reset = () => {
-    const [dropUrl, setDropUrl] = useState('')
-    const [listUrl, setListUrl] = useState('')
-    const [currentLocation, setCurrentLocation] = useState('')
-    const [currentCoords, setCurrentCoords] = useState({})
-    const [submitDisabled, setSubmitDisabled] = useState(true)
-    const [locationMethod, setLocationMethod] = useState('')
+    // const [dropUrl, setDropUrl] = useState('')
+    // const [listUrl, setListUrl] = useState('')
+    // const [currentLocation, setCurrentLocation] = useState('')
+    // const [currentCoords, setCurrentCoords] = useState({})
+    // const [submitDisabled, setSubmitDisabled] = useState(true)
+    // const [locationMethod, setLocationMethod] = useState('')
 
     setDropUrl('')
     setListUrl('')
