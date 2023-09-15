@@ -76,6 +76,21 @@ function App() {
     }
   }
 
+  const reset = () => {
+    const [dropUrl, setDropUrl] = useState('')
+    const [listUrl, setListUrl] = useState('')
+    const [currentLocation, setCurrentLocation] = useState('')
+    const [currentCoords, setCurrentCoords] = useState({})
+    const [submitDisabled, setSubmitDisabled] = useState(true)
+    const [locationMethod, setLocationMethod] = useState('')
+
+    setDropUrl('')
+    setListUrl('')
+    setCurrentCoords('')
+    setCurrentCoords('')
+    setLocationMethod('')
+  }
+
   return (
     <div className="App">
       <h1>
@@ -95,46 +110,50 @@ function App() {
           <input className="form_input" type="text" name="drop_url" placeholder='Drop Url Goes Here' onChange={onUrlInputChange} htmlFor="link_submit" required/>
         </div>
 
-        <h2>2. Define search area using: {locationMethod}</h2>
-        {locationMethod === '' &&
-          <div className='location_method'>
-            <button onClick={() => setLocationMethod('written')}>A Typed City, State</button>
-            <button onClick={() => setLocationMethod('geolocation')}>Your Current Location</button>
-          </div>
-        }
+        <h2>2. Choose search area.</h2>
+        <div className='input_group'>
+          {locationMethod === '' &&
+            <div className='location_method'>
+              <button onClick={() => setLocationMethod('written')}>A Typed City, State</button>
+              <button onClick={() => setLocationMethod('geolocation')}>Your Current Location</button>
+            </div>
+          }
 
-        <div className="input_group">
           {locationMethod === 'written' && (
             <>
               <input className="form_input" type="text" name="current_location" placeholder='City, State' onChange={onCurrentLocationChange} htmlFor="link_submit" disabled={locationMethod !== 'written'} required={locationMethod === 'written'}/>
-       
               <button onClick={() => setLocationMethod('')} className='back'>{'< Pick a different method'}</button>
             </>
           )}
+          
+          { locationMethod === 'geolocation' && 
+            <>
+              {Object.entries(currentCoords).length === 0 && 
+                <button type="submit" value="Fetch Location >" onClick={onGeoLocation} htmlFor="location_fetch" disabled={locationMethod !== 'geolocation'} required={locationMethod === 'geolocation'}>Fetch Location</button>
+              }
+              {Object.entries(currentCoords).length > 0 && 
+                <div className="geolocations">
+                  <label>Latitude:</label>
+                  <input className="form_input geo" name="lat" value={currentCoords.lat} required/>
+                  <label>Longitude</label>
+                  <input className="form_input geo" name="lng" value={currentCoords.lng} required/>
+                  <button onClick={() => setCurrentCoords('')}>{'Reset Location'}</button>
+                </div>
+              }
+              <button onClick={() => setLocationMethod('')} className='back'>{'< Pick a different method'}</button>
+            </>
+          }
         </div>
-        { locationMethod === 'geolocation' && 
-          <>
-            {Object.entries(currentCoords).length === 0 && 
-              <button type="submit" value="Fetch Location >" onClick={onGeoLocation} htmlFor="location_fetch" disabled={locationMethod !== 'geolocation'} required={locationMethod === 'geolocation'}>Fetch Location</button>
-            }
-            {Object.entries(currentCoords).length > 0 && 
-              <div className="geolocations">
-                <label>Latitude:</label>
-                <input className="form_input geo" name="lat" value={currentCoords.lat} required/>
-                <label>Longitude</label>
-                <input className="form_input geo" name="lng" value={currentCoords.lng} required/>
-                <button onClick={() => setCurrentCoords('')}>{'Reset Location'}</button>
-              </div>
-            }
-            <button onClick={() => setLocationMethod('')} className='back'>{'< Pick a different method'}</button>
-          </>
-        }
 
-        <div className="submission">
+        <div className="input_group submissions">
+          <h2>3. Get your link and use it.</h2>
           {!listUrl && <input type="submit" value="Get My link" onClick={processLocations} htmlFor="link_submit"/>}
           { 
             listUrl &&
-              <a href={listUrl} target='_blank' rel="noreferrer">Click for Directions</a>
+              <>
+                <a href={listUrl} target='_blank' rel="noreferrer">{'> Click for Directions <'}</a>
+                <button className='reset_process' onClick={() => {}}>{'<< Start Over'}</button>
+              </>
           }
         </div>
       </form>
