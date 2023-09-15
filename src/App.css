@@ -129,23 +129,58 @@ button.back {
   }
 }
 
+.geolocations {
+  display: grid;  
+  grid-template-areas: 
+    "geolabel1 geolabel2"
+    "geodata1 geodata2"
+    "reset reset";
+  column-gap: 10px;
+
+  & .form_input {
+    &:first-of-type {
+      grid-area: geodata1;
+    }
+    &:last-of-type {
+      grid-area: geodata2;
+    }
+  }
+
+  & button {
+    grid-area: reset;
+    margin: 10px auto 0 auto;
+    border: none;
+  }
+
+  & label {
+    text-align: left;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 3px;
+    color: var(--color-primary-blue);
+
+    &:first-of-type {
+      grid-area: geolabel1;
+    }
+    &:last-of-type {
+      grid-area: geolabel2;
+    }
+  }
+}
+
+h2 {
+  margin: 0 0 5px 0;
+  font-size: 20px;
+  color: var(--color-primary-blue);
+  text-align: left;
+}
+
 input.form_input:auto-fill,
 input.form_input:-webkit-autofill, 
 input.form_input:-webkit-autofill:focus {
   font-size: 17px !important;
   background-color: var(--color-primary-blue) !important;
   color: white !important;
-}
-
-h2 {
-  font-size: 20px;
-  color: var(--color-primary-blue);
-  text-align: left;
-}
-
-h3 {
-  font-size: 18px;
-  /* background-color: var(--color-primary-blue); */
 }
 
 .input_group {
@@ -184,11 +219,15 @@ input[type="submit"]:hover {
 
 .location_method {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  padding-top: 5px;
 
   & button {
     width: auto;
     font-size: 14px;
+    @media screen and (min-width: 568px) {
+      width: 45%;
+    }
 
     &:hover, &:active {
       background-color: var(--color-primary-blue);
@@ -197,10 +236,10 @@ input[type="submit"]:hover {
   }
 }
 
-.submission {
-  display: flex;
-  flex-direction: column;
-  margin-top: 35px;
+.submissions {
+  & button {
+    border:none;
+  }
 }
 
 .title_animate:hover {
