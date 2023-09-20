@@ -29,12 +29,20 @@ function App() {
     setSubmitDisabled(false)
   }
 
+  const methodChange = () => {
+    console.log("methodChange")
+    setLocationMethod(''); 
+    setListUrl('');
+    setCurrentCoords('')
+    setCurrentLocation('')
+  }
+
   const onCurrentLocationChange = (e) => {
     setCurrentLocation(e.target.value)
     if (submitDisabled === true && currentLocation.length > 0) {
       setSubmitDisabled(false)
     }
-    if (currentCoords) { setCurrentCoords({lat: 0, lng: 0}) }
+    if (currentCoords) { setCurrentCoords('') }
   }
 
   const onGeoLocation = (e) => {
@@ -45,6 +53,9 @@ function App() {
 
   const onUrlInputChange = (e) => {
     setDropUrl(e.target.value)
+    if (currentCoords.lat) {
+      setCurrentCoords('')
+    }
   }
 
   const processLocations = async (e) => {
@@ -98,7 +109,7 @@ function App() {
       </h1>
       <form id="link_submit" ref={formRef}>
         <div className='input_group'>
-          <h2>1. Place the latest drop url:</h2>
+          <h2>1. Place the latest drop url.</h2>
           <input className="form_input" type="text" name="drop_url" placeholder='Drop Url Goes Here' onChange={onUrlInputChange} htmlFor="link_submit" required value={dropUrl}/>
         </div>
 
@@ -115,7 +126,7 @@ function App() {
             {locationMethod === 'written' && (
               <>
                 <input className="form_input" type="text" name="current_location" placeholder='City, State' onChange={onCurrentLocationChange} htmlFor="link_submit" disabled={locationMethod !== 'written'} required={locationMethod === 'written'}/>
-                <button onClick={() => {setLocationMethod(''); setListUrl('');}} className='back'>{listUrl ? '< Change Method' : '< Use Geolocation Instead'}</button>
+                <button onClick={methodChange} className='back'>{listUrl ? '< Change Method' : '< Use Geolocation Instead'}</button>
               </>
             )}
             
@@ -130,10 +141,10 @@ function App() {
                     <input className="form_input geo" name="lat" value={currentCoords.lat} required/>
                     <label>Longitude</label>
                     <input className="form_input geo" name="lng" value={currentCoords.lng} required/>
-                    <button onClick={() => setCurrentCoords('')}>{'Reset Location'}</button>
+                    <button onClick={() => setCurrentCoords('')} className=''>{'Reset Coordinates'}</button>
                   </div>
                 }
-                <button onClick={() => {setLocationMethod(''); setListUrl('')}} className='back'>{listUrl ? '< Change Method' : '< Use City, State Instead'}</button>
+                <button onClick={methodChange} className='back'>{listUrl ? '< Change Method' : '< Use City, State Instead'}</button>
               </>
             }
           </div>
@@ -141,13 +152,13 @@ function App() {
 
         {dropUrl && (currentCoords || currentLocation) &&
           <div className="input_group submissions">
-            <h2>3. Get your link and use it.</h2>
-            {!listUrl && <input type="submit" value="Get My link" onClick={processLocations} htmlFor="link_submit"/>}
+            <h2>3. Get closest stores as waypoints.</h2>
+            {!listUrl && <input type="submit" value="Get My Link" onClick={processLocations} htmlFor="link_submit"/>}
             { 
               listUrl &&
                 <>
-                  <a href={listUrl} target='_blank' rel="noreferrer">{'> Click for Directions <'}</a>
-                  <button className='reset_process' onClick={() => reset()}>{'<< Start Over'}</button>
+                  <a href={listUrl} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
+                  <button className='reset' onClick={() => reset()}>{'<< Start Over'}</button>
                 </>
             }
           </div>

@@ -44,61 +44,52 @@
   }
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 a {
-  padding: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  background: white;
-  border: 2px solid var(--color-primary-blue);
-  border-radius: 6px;
-  color: var(--color-primary-blue);
-  cursor: pointer;
   text-decoration: none;
-
   &:hover {
     background-color: var(--color-primary-blue);
     color: white;
   }
 }
 
-h1 {
-  color: var(--color-primary-blue);
+button, input[type="submit"], a {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 16px;
   font-weight: bold;
-  font-family: 'library';
-}
+  border-radius: 6px;
+  cursor: pointer;
+  background: white;
+  border: 2px solid var(--color-primary-blue);
+  color: var(--color-primary-blue);
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+  &[disabled] {
+    opacity: .5;
+  }
+
+  &:hover {
+    color: white;
+    background: var(--color-primary-blue);
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
 button.back {
-  border: none;
-  margin-top: 5px;
+  background: white;
+}
 
-  &:hover {
-    text-decoration: underline;
+button.reset {
+  padding: 20px;
+  margin-top: 15px;
+  color: var(--color-primary-red);
+  border: 2px solid var(--color-primary-red);
+  background: white;
+  
+  &:hover, &:active {
+    color: white;
+    border: 2px solid var(--color-primary-red);
+    background: var(--color-primary-red);
   }
 }
 
@@ -110,8 +101,9 @@ button.back {
 .form_input {
   width: calc(100% - 16px);
   border: none;
+  margin-top: 10px;
   padding: 10px 10px 10px 6px;
-  font-size: 17px;
+  font-size: 16px;
   background-color: var(--color-primary-blue);
   border-radius: 6px;
   outline: none;
@@ -148,14 +140,15 @@ button.back {
 
   & button {
     grid-area: reset;
-    margin: 10px auto 0 auto;
-    border: none;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   & label {
     text-align: left;
     font-weight: bold;
     font-size: 16px;
+    margin-top: 10px;
     margin-bottom: 3px;
     color: var(--color-primary-blue);
 
@@ -168,8 +161,14 @@ button.back {
   }
 }
 
+h1 {
+  color: var(--color-primary-blue);
+  font-weight: bold;
+  font-family: 'library';
+}
+
 h2 {
-  margin: 0 0 5px 0;
+  margin: 0;
   font-size: 20px;
   color: var(--color-primary-blue);
   text-align: left;
@@ -188,28 +187,11 @@ input.form_input:-webkit-autofill:focus {
   position: relative;
   display: flex;
   flex-direction: column;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 
   &:empty {
     display: none;
   }
-}
-
-input[type="submit"], button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  background: white;
-  border: 2px solid var(--color-primary-blue);
-  border-radius: 6px;
-  color: var(--color-primary-blue);
-  cursor: pointer;
-}
-
-input[type="submit"][disabled] {
-  opacity: .5;
 }
 
 input[type="submit"]:hover {
@@ -220,7 +202,6 @@ input[type="submit"]:hover {
 .location_method {
   display: flex;
   justify-content: space-between;
-  padding-top: 5px;
 
   & button {
     width: auto;
@@ -237,8 +218,8 @@ input[type="submit"]:hover {
 }
 
 .submissions {
-  & button {
-    border:none;
+  & a {
+    width: auto;
   }
 }
 
