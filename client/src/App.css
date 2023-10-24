@@ -1,0 +1,228 @@
+:root {
+  --color-primary-red: #E81E2F;
+  --color-primary-blue: #0063A4;
+}
+
+@font-face {
+  font-family: "Alfarn", sans-serif;
+  src: url("./fonts/Alfarn.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "gone";
+  src: local("youre gone"), url("./fonts/youre\ gone.otf") format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "gone";
+  src: local("youre gone it"), url("./fonts/youre\ gone it.otf") format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "library";
+  src: local("Library 3 am"), url("./fonts/Library\ 3\ am.otf") format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  margin: 20px auto 0 auto;
+  max-width: 400px;
+  padding: 0 10px;
+
+  @media screen and (min-width: 568px) {
+    margin-top: 75px;
+  }
+}
+
+a {
+  text-decoration: none;
+  &:hover {
+    background-color: var(--color-primary-blue);
+    color: white;
+  }
+}
+
+button, input[type="submit"], a {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  background: white;
+  border: 2px solid var(--color-primary-blue);
+  color: var(--color-primary-blue);
+
+  &[disabled] {
+    opacity: .5;
+  }
+
+  &:hover {
+    color: white;
+    background: var(--color-primary-blue);
+  }
+}
+
+button.back {
+  background: white;
+}
+
+button.reset {
+  padding: 20px;
+  margin-top: 15px;
+  color: var(--color-primary-red);
+  border: 2px solid var(--color-primary-red);
+  background: white;
+  
+  &:hover, &:active {
+    color: white;
+    border: 2px solid var(--color-primary-red);
+    background: var(--color-primary-red);
+  }
+}
+
+.enable-view { 
+  height: 100vh;
+  width: 100vw;
+}
+
+.form_input {
+  width: calc(100% - 16px);
+  border: none;
+  margin-top: 10px;
+  padding: 10px 10px 10px 6px;
+  font-size: 16px;
+  background-color: var(--color-primary-blue);
+  border-radius: 6px;
+  outline: none;
+  color: white;
+
+  &::placeholder {
+    color: white;
+    font-style: italic;
+    font-weight: bold;
+    opacity: .8;
+  }
+
+  &:focus::placeholder {
+    opacity: 0;
+  }
+}
+
+.geolocations {
+  display: grid;  
+  grid-template-areas: 
+    "geolabel1 geolabel2"
+    "geodata1 geodata2"
+    "reset reset";
+  column-gap: 10px;
+
+  & .form_input {
+    &:first-of-type {
+      grid-area: geodata1;
+    }
+    &:last-of-type {
+      grid-area: geodata2;
+    }
+  }
+
+  & button {
+    grid-area: reset;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  & label {
+    text-align: left;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 3px;
+    color: var(--color-primary-blue);
+
+    &:first-of-type {
+      grid-area: geolabel1;
+    }
+    &:last-of-type {
+      grid-area: geolabel2;
+    }
+  }
+}
+
+h1 {
+  color: var(--color-primary-blue);
+  font-weight: bold;
+  font-family: 'library';
+}
+
+h2 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--color-primary-blue);
+  text-align: left;
+}
+
+input.form_input:auto-fill,
+input.form_input:-webkit-autofill, 
+input.form_input:-webkit-autofill:focus {
+  font-size: 17px !important;
+  background-color: var(--color-primary-blue) !important;
+  color: white !important;
+}
+
+.input_group {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  &:empty {
+    display: none;
+  }
+}
+
+input[type="submit"]:hover {
+  background-color: var(--color-primary-blue);
+  color: white;
+}
+
+.location_method {
+  display: flex;
+  justify-content: space-between;
+
+  & button {
+    width: auto;
+    font-size: 14px;
+    @media screen and (min-width: 568px) {
+      width: 45%;
+    }
+
+    &:hover, &:active {
+      background-color: var(--color-primary-blue);
+      color: white;
+    }
+  }
+}
+
+.submissions {
+  & a {
+    width: auto;
+  }
+}
+
+.title_animate:hover {
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
+}
