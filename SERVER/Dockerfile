@@ -1,8 +1,5 @@
 FROM node:alpine
 WORKDIR /api
-COPY ../package.json ./
-COPY ../package-lock.json ./
-COPY ./SERVER/*.js* ./
-COPY ../.env ./
+COPY ./ ./
 RUN npm i
 CMD ["node", "server.js"]

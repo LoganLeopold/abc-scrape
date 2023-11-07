@@ -20,7 +20,7 @@ services:
   api:
     build:
       dockerfile: Dockerfile
-      context: ./
+      context: ./SERVER
     volumes:
       - /app/node_modules
       - ./server:/app
@@ -33,7 +33,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
     build:
       dockerfile: Dockerfile
-      context: ./
+      context: ./client
     volumes:
       - /app/node_modules
       - ./client:/app
