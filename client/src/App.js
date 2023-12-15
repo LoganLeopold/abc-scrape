@@ -78,7 +78,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        'http://localhost:3001/processLocations', 
+        '/api/processLocations', 
         payload,
       );
       setListUrl(response.data)
