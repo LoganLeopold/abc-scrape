@@ -53,6 +53,7 @@ const createGooglePlaces = async (addresses) => {
       })
       return thisPlace.data
     }))
+    console.log(places)
     return places
   } catch (error) {
     return error 
