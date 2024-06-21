@@ -26,6 +26,7 @@ function App() {
   }
 
   const geoLocateError = (error) => {
+    console.log(error)
     setSubmitDisabled(false)
   }
 
@@ -48,6 +49,7 @@ function App() {
   const onGeoLocation = (e) => {
     e.preventDefault()
     setSubmitDisabled(true)
+    console.log(navigator.geolocation)
     navigator.geolocation.getCurrentPosition(geoLocateSuccess, geoLocateError)
   }
 
