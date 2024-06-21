@@ -32,9 +32,10 @@ const parseList = async (listUrl) => {
       let processed = link.href.split('place/')[1].replace(/(\+VA)/gm, " VA").replace(/(\+)|(%20)/gm, " ")
       return processed 
     })
-
+    console.log(console.log('addresses', '\n', addresses))
     return addresses
   } catch (error) {
+    console.log('parseListError', '\n', error)
     return error
   }
 }
@@ -53,7 +54,7 @@ const createGooglePlaces = async (addresses) => {
       })
       return thisPlace.data
     }))
-    console.log(places)
+    console.log('places', '\n', places)
     return places
   } catch (error) {
     return error 
@@ -119,19 +120,23 @@ const constructUrl = (filteredSortedPlaces) => {
   } = filteredSortedPlaces[filteredSortedPlaces.length - 1].candidates[0];
   const urlDestination = `${destinationLat},${destinationLng}`
 
+  console.log('urlDestination', '\n', urlDestination)
   let waypoints = '';
   let waypointIds = '';
 
   // Build waypoint components of URL
   for (i = 0; i < filteredSortedPlaces.length - 1; i++) {
     const curr = filteredSortedPlaces[i];
+    console.log('buildWayPointLoop:curr', '\n', curr)
     const {lat, lng} = curr.candidates[0].geometry.location;
+    console.log('buildWayPointLoop:latlng', '\n', {lat: lat, lng: lng})
     waypoints += `${lat},${lng}${i < filteredSortedPlaces.length - 2 ? '%7C' : ''}`;
     waypointIds += `${curr.candidates[0].place_id}${i < filteredSortedPlaces.length - 2 ? '%7C' : ''}`
   }
 
   const url = `https://www.google.com/maps/dir/?api=1&waypoints=${waypoints}&waypoint_place_ids=${waypointIds}&destination=${urlDestination}&destination_place_id=${destinationPlaceId}`;
 
+  console.log('finalUrl', '\n', url)
   return url;
 }
 
