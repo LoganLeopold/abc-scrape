@@ -1,0 +1,41 @@
+version: '3.8'
+
+x-common-variables: &common-variables
+  MYSQL_DATABASE: books
+  MYSQL_USER: MYSQL_USER
+  MYSQL_PASSWORD: MYSQL_PASSWORD
+
+services:
+  nginx:
+    depends_on:
+      - api
+      - client
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "80:80"
+      - "443:80"
+      - "3050:80"
+
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: ./SERVER
+    volumes:
+      - /app/node_modules
+      - ./server:/app
+    environment:
+      <<: *common-variables
+
+  client:
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+    volumes:
+      - /app/node_modules
+      - ./client:/app
