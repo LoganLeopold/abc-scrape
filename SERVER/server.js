@@ -31,11 +31,9 @@ const parseList = async (listUrl) => {
     let addresses = Array.from(links).map( link => {
       let processed = link.href.split('place/')[1].replace(/(\+VA)/gm, " VA").replace(/(\+)|(%20)/gm, " ")
       return processed 
-    })
-    console.log('addresses', '\n', addresses)
+    })    
     return addresses
-  } catch (error) {
-    console.log('parseListError', '\n', error)
+  } catch (error) {    
     return error
   }
 }
@@ -53,9 +51,7 @@ const createGooglePlaces = async (addresses) => {
         }
       })
       return thisPlace.data
-    }))
-    console.log('createGooglePlaces')
-    console.log('places', '\n', places)
+    }))        
     return places
   } catch (error) {
     return error 
@@ -120,24 +116,20 @@ const constructUrl = (filteredSortedPlaces) => {
     geometry: {location: { lat: destinationLat, lng: destinationLng }}, place_id: destinationPlaceId 
   } = filteredSortedPlaces[filteredSortedPlaces.length - 1].candidates[0];
   const urlDestination = `${destinationLat},${destinationLng}`
-
-  console.log('urlDestination', '\n', urlDestination)
+  
   let waypoints = '';
   let waypointIds = '';
 
   // Build waypoint components of URL
   for (i = 0; i < filteredSortedPlaces.length - 1; i++) {
-    const curr = filteredSortedPlaces[i];
-    console.log('buildWayPointLoop:curr', '\n', curr)
-    const {lat, lng} = curr.candidates[0].geometry.location;
-    console.log('buildWayPointLoop:latlng', '\n', {lat: lat, lng: lng})
+    const curr = filteredSortedPlaces[i];    
+    const {lat, lng} = curr.candidates[0].geometry.location;    
     waypoints += `${lat},${lng}${i < filteredSortedPlaces.length - 2 ? '%7C' : ''}`;
     waypointIds += `${curr.candidates[0].place_id}${i < filteredSortedPlaces.length - 2 ? '%7C' : ''}`
   }
 
   const url = `https://www.google.com/maps/dir/?api=1&waypoints=${waypoints}&waypoint_place_ids=${waypointIds}&destination=${urlDestination}&destination_place_id=${destinationPlaceId}`;
-
-  console.log('finalUrl', '\n', url)
+  
   return url;
 }
 
@@ -147,8 +139,7 @@ const withLocationData = async (req, res) => {
     const places = await createGooglePlaces(addresses)
     const currentLocation = await getCurrentLocationPlace(req.body.currentLocation)
     const closePlaces = distanceFilterPlaces(places, currentLocation)
-    const finalUrl = constructUrl(closePlaces)
-    console.log('withLocationData finalUrl', finalUrl)
+    const finalUrl = constructUrl(closePlaces)    
     return finalUrl;
   } catch (error) {
     return error 
@@ -160,8 +151,7 @@ const withDefaultLocation = async (req, res) => {
     const addresses = await parseList(req.body.dropUrl)
     const places = await createGooglePlaces(addresses)
     const closePlaces = distanceFilterPlaces(places)
-    const finalUrl = constructUrl(closePlaces)
-    console.log('withDefaultLocation finalUrl', finalUrl)
+    const finalUrl = constructUrl(closePlaces)    
     return finalUrl;
   } catch (error) {
     return error 
@@ -177,38 +167,13 @@ app.post('/processLocations', async (req, res) => {
     We should give the URL the starting point if it's defined. 
   */
   try {
-    const finalUrl = req.body.currentLocation ? await withLocationData(req, res) : await withDefaultLocation(req, res)
-    console.log("api.post /processLocations finalUrl", finalUrl)
+    const finalUrl = req.body.currentLocation ? await withLocationData(req, res) : await withDefaultLocation(req, res)    
     res.json(finalUrl)
   } catch (err) {
     res.send(err)
   }
 });
 
-// app.listen(port, async () => {
-//   console.log(`Example app listening on port ${port}`);
-// })
-
-const processLocations = async () => {
-  console.log("processLocations")
-  /*
-    Home location is best because that is the ~filter~ location, not the Google Maps starting point for the journey. 
-    The starting point defaults in the maps. The location does not. 
-    We should give the URL the starting point if it's defined. 
-  */
-  try {
-    const finalUrl = req.body.currentLocation ? await withLocationData(req, res) : await withDefaultLocation(req, res)
-    console.log("api.post /processLocations finalUrl", finalUrl)
-    return finalUrl
-  } catch (err) {
-    return err
-  }
-}
-
-const req = {
-  body: {
-    currentLocation: "Chesapeake, VA",
-    dropUrl: "https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html"
-  }
-}
-processLocations(req, {})
+app.listen(port, async () => {
+  console.log(`Example app listening on port ${port}`);
+})
