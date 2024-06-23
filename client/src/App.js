@@ -13,7 +13,6 @@ function App() {
   const [locationMethod, setLocationMethod] = useState('')
   const formRef = useRef(null)
 
-  console.log(navigator.geolocation)
   const errorMessages = {
     url: "Add a drop url",
     location: "You haven't given a proper city, state or used your current location to add coordinates."
