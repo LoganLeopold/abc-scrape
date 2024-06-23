@@ -32,7 +32,7 @@ const parseList = async (listUrl) => {
       let processed = link.href.split('place/')[1].replace(/(\+VA)/gm, " VA").replace(/(\+)|(%20)/gm, " ")
       return processed 
     })
-    console.log(console.log('addresses', '\n', addresses))
+    console.log('addresses', '\n', addresses)
     return addresses
   } catch (error) {
     console.log('parseListError', '\n', error)
@@ -54,6 +54,7 @@ const createGooglePlaces = async (addresses) => {
       })
       return thisPlace.data
     }))
+    console.log('createGooglePlaces')
     console.log('places', '\n', places)
     return places
   } catch (error) {
@@ -147,6 +148,7 @@ const withLocationData = async (req, res) => {
     const currentLocation = await getCurrentLocationPlace(req.body.currentLocation)
     const closePlaces = distanceFilterPlaces(places, currentLocation)
     const finalUrl = constructUrl(closePlaces)
+    console.log('withLocationData finalUrl', finalUrl)
     return finalUrl;
   } catch (error) {
     return error 
@@ -159,11 +161,13 @@ const withDefaultLocation = async (req, res) => {
     const places = await createGooglePlaces(addresses)
     const closePlaces = distanceFilterPlaces(places)
     const finalUrl = constructUrl(closePlaces)
+    console.log('withDefaultLocation finalUrl', finalUrl)
     return finalUrl;
   } catch (error) {
     return error 
   }
 }
+
 // https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html
 app.post('/processLocations', async (req, res) => {
   console.log("processLocations")
@@ -174,6 +178,7 @@ app.post('/processLocations', async (req, res) => {
   */
   try {
     const finalUrl = req.body.currentLocation ? await withLocationData(req, res) : await withDefaultLocation(req, res)
+    console.log("api.post /processLocations finalUrl", finalUrl)
     res.json(finalUrl)
   } catch (err) {
     res.send(err)
@@ -183,3 +188,10 @@ app.post('/processLocations', async (req, res) => {
 app.listen(port, async () => {
   console.log(`Example app listening on port ${port}`);
 })
+
+const req = {
+  body: {
+    currentLocation: "Chesapeake, VA"
+  }
+}
+processLocations(req, {})
