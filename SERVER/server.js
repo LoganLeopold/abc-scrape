@@ -199,9 +199,9 @@ const processLocations = async () => {
   try {
     const finalUrl = req.body.currentLocation ? await withLocationData(req, res) : await withDefaultLocation(req, res)
     console.log("api.post /processLocations finalUrl", finalUrl)
-    res.json(finalUrl)
+    return finalUrl
   } catch (err) {
-    res.send(err)
+    return err
   }
 }
 
