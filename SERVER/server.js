@@ -185,9 +185,9 @@ app.post('/processLocations', async (req, res) => {
   }
 });
 
-app.listen(port, async () => {
-  console.log(`Example app listening on port ${port}`);
-})
+// app.listen(port, async () => {
+//   console.log(`Example app listening on port ${port}`);
+// })
 
 const processLocations = async () => {
   console.log("processLocations")
