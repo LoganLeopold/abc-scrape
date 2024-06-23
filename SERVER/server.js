@@ -189,9 +189,26 @@ app.listen(port, async () => {
   console.log(`Example app listening on port ${port}`);
 })
 
+const processLocations = async () => {
+  console.log("processLocations")
+  /*
+    Home location is best because that is the ~filter~ location, not the Google Maps starting point for the journey. 
+    The starting point defaults in the maps. The location does not. 
+    We should give the URL the starting point if it's defined. 
+  */
+  try {
+    const finalUrl = req.body.currentLocation ? await withLocationData(req, res) : await withDefaultLocation(req, res)
+    console.log("api.post /processLocations finalUrl", finalUrl)
+    res.json(finalUrl)
+  } catch (err) {
+    res.send(err)
+  }
+}
+
 const req = {
   body: {
-    currentLocation: "Chesapeake, VA"
+    currentLocation: "Chesapeake, VA",
+    dropUrl: "https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html"
   }
 }
 processLocations(req, {})
