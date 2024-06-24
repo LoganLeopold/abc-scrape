@@ -61,30 +61,28 @@ button, input[type="submit"], a {
   font-weight: bold;
   border-radius: 6px;
   cursor: pointer;
-  background: white;
+  background: var(--color-primary-blue);
+  color: white;
   border: 2px solid var(--color-primary-blue);
-  color: var(--color-primary-blue);
 
   &[disabled] {
     opacity: .5;
   }
 
   &:hover {
-    color: white;
-    background: var(--color-primary-blue);
+    color: var(--color-primary-blue);
+    background: white;
   }
 }
 
-button.back {
-  background: white;
-}
-
 button.reset {
-  padding: 20px;
-  margin-top: 15px;
+  margin-top: 30px;
   color: var(--color-primary-red);
   border: 2px solid var(--color-primary-red);
   background: white;
+  width: 45%;
+  margin-left: auto;
+  margin-right: auto;
   
   &:hover, &:active {
     color: white;
@@ -104,10 +102,11 @@ button.reset {
   margin-top: 10px;
   padding: 10px 10px 10px 6px;
   font-size: 16px;
-  background-color: var(--color-primary-blue);
+  background-color: white;
   border-radius: 6px;
   outline: none;
-  color: white;
+  color: var(--color-primary-blue);
+  border: 2px solid var(--color-primary-blue);
 
   &::placeholder {
     color: white;
@@ -118,6 +117,15 @@ button.reset {
 
   &:focus::placeholder {
     opacity: 0;
+  }
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover, 
+  &:-webkit-autofill:focus,
+  &:-internal-autofill-selected {
+    color: white !important;
+    background-color: var(--color-primary-blue) !important;
+    -webkit-transition-delay: 99999s;
   }
 }
 
@@ -220,6 +228,10 @@ input[type="submit"]:hover {
 .submissions {
   & a {
     width: auto;
+    padding: 15px;
+    color: white;
+    background: var(--color-primary-blue);
+    border: 2px solid var(--color-primary-blue);
   }
 }
 
