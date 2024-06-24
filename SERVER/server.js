@@ -174,6 +174,11 @@ app.post('/processLocations', async (req, res) => {
   }
 });
 
+app.get('/test', async (req, res) => {
+  // res.json({"goteeem": "true"})
+  res.send("Hello dude run change")
+})
+
 app.listen(port, async () => {
   console.log(`Example app listening on port ${port}`);
 })
