@@ -38,7 +38,7 @@ const parseList = async (listUrl) => {
   }
 }
 
-// Fetches Google places with long/lat data
+// Fetches Google places with long/lat data from array of addresses
 const createGooglePlaces = async (addresses) => {
   try {
     const places = await Promise.all(addresses.map(async (add, i) => {  
@@ -58,6 +58,7 @@ const createGooglePlaces = async (addresses) => {
   }
 }
 
+// Used solely for fetching typed city + state
 const getCurrentLocationPlace = async (placeString) => {
   try {
     const currentLocation = await googleClient.findPlaceFromText({
@@ -74,38 +75,36 @@ const getCurrentLocationPlace = async (placeString) => {
   }
 }
 
-// Filter place by distance from home
-const distanceFilterPlaces = (placesCollection, currentLocation) => {
-  let currentLat;
-  let currentLon;
-  // If the user provided a current location
-  if (currentLocation) {
-    const currGeoObject = currentLocation.candidates[0].geometry.location
-    currentLat = currGeoObject.lat
-    currentLon = currGeoObject.lng
+// Return {lat: , lon: } for typed city + state or coordinates
+const resolveCurrentLocation = async (currentLocationString) => {
+  if (currentLocationString.includes('lat') && currentLocationString.includes('lon')) {
+    return JSON.parse(currentLocationString)
   } else {
-    // Defaults to my street - dev bias *shrug*
-    currentLat = 38.8856842
-    currentLon = -76.9930121
+    const resolvedCurrentLocation = await getCurrentLocationPlace(currentLocationString)
+    const {lat, lng} = resolvedCurrentLocation.candidates[0].geometry.location
+    return {lat, lon: lng};
   }
-  const homeLocation = {lat: currentLat, lon: currentLon}
+}
+
+// Filter place by distance from home 
+// Takes {lat: __, lon: __} object now
+const distanceFilterPlaces = (placesCollection, currentLocation) => {
   // Find the close places
   const closePlaces = placesCollection.reduce((acc, curr, i) => {
     if (curr.candidates.length > 0) {
       let { lat, lng } = curr.candidates[0].geometry.location
       let miles = Distance.between(
-        homeLocation,
+        currentLocation,
         {lat: lat, lon: lng}
       ).human_readable('customary').distance
-      // Only push if the distance is less than 10 miles
-      if (Number(miles) < 10) acc.push([miles, curr]);
+      // Only push if the distance is less than 30 miles *and* there are less than 10 results already
+      if (Number(miles) < 30) acc.push([miles, curr]);
     }
     return acc
   },[])
 
-  // sort them by distance and return just the place object
-  const distanceSortedPlaces = closePlaces.sort((a,b) => a[0] - b[0]).map(place => place[1]);
-
+  // sort them by distance and return just the place object of the 10 closest results
+  const distanceSortedPlaces = closePlaces.sort((a,b) => a[0] - b[0]).map(place => place[1]).slice(0,10);
   return distanceSortedPlaces;
 }
 
@@ -133,51 +132,20 @@ const constructUrl = (filteredSortedPlaces) => {
   return url;
 }
 
-const withLocationData = async (req, res) => {
-  try {
-    const addresses = await parseList(req.body.dropUrl)
-    const places = await createGooglePlaces(addresses)
-    const currentLocation = await getCurrentLocationPlace(req.body.currentLocation)
-    const closePlaces = distanceFilterPlaces(places, currentLocation)
-    const finalUrl = constructUrl(closePlaces)    
-    return finalUrl;
-  } catch (error) {
-    return error 
-  }
-}
-
-const withDefaultLocation = async (req, res) => {
-  try {
-    const addresses = await parseList(req.body.dropUrl)
-    const places = await createGooglePlaces(addresses)
-    const closePlaces = distanceFilterPlaces(places)
-    const finalUrl = constructUrl(closePlaces)    
-    return finalUrl;
-  } catch (error) {
-    return error 
-  }
-}
-
 // https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html
 app.post('/processLocations', async (req, res) => {
   console.log("processLocations")
-  /*
-    Home location is best because that is the ~filter~ location, not the Google Maps starting point for the journey. 
-    The starting point defaults in the maps. The location does not. 
-    We should give the URL the starting point if it's defined. 
-  */
   try {
-    const finalUrl = req.body.currentLocation ? await withLocationData(req, res) : await withDefaultLocation(req, res)    
+    const addresses = await parseList(req.body.dropUrl)
+    const places = await createGooglePlaces(addresses)
+    const currentLocation = await resolveCurrentLocation(req.body.currentLocation)
+    const closePlaces = distanceFilterPlaces(places, currentLocation)
+    const finalUrl = constructUrl(closePlaces)  
     res.json(finalUrl)
   } catch (err) {
     res.send(err)
   }
 });
-
-app.get('/test', async (req, res) => {
-  // res.json({"goteeem": "true"})
-  res.send("Hello dude run change")
-})
 
 app.listen(port, async () => {
   console.log(`Example app listening on port ${port}`);

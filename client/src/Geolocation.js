@@ -1,15 +1,14 @@
 import { useState } from 'react';
-import axios from 'axios';
 
-const Geolocation = ({changeMethod, reportCoords}) => {
+const Geolocation = ({ setGeolocation }) => {
   const [currentCoords, setCurrentCoords] = useState('')
   const [status, setStatus] = useState('initialized')
 
   const geoLocateSuccess = (data) => {
     setStatus('success')
     const { latitude, longitude } = data.coords
-    setCurrentCoords({lat: latitude, lng: longitude})
-    reportCoords({lat: latitude, lng: longitude})
+    setCurrentCoords({lat: latitude, lon: longitude})
+    setGeolocation(JSON.stringify({lat: latitude, lon: longitude}))
   }
 
   const geoLocateError = (error) => {
@@ -34,7 +33,7 @@ const Geolocation = ({changeMethod, reportCoords}) => {
           <label>Latitude:</label>
           <input className="form_input geo" name="lat" value={currentCoords.lat} required/>
           <label>Longitude</label>
-          <input className="form_input geo" name="lng" value={currentCoords.lng} required/>
+          <input className="form_input geo" name="lon" value={currentCoords.lon} required/>
           <button onClick={onGeoLocation} className=''>{'Re-fetch Coordinates'}</button>
         </div>
       }
@@ -44,7 +43,7 @@ const Geolocation = ({changeMethod, reportCoords}) => {
       {status === 'error' &&
         <p>{currentCoords}</p>
       }
-      <button className='back' onClick={()=>{changeMethod()}}>{'< Use City, State Instead'}</button>
+      {/* <button className='back' onClick={()=>{changeMethod('written')}}>{'< Use City, State Instead'}</button> */}
     </>
   )
 }

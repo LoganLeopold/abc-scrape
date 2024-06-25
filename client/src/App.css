@@ -109,7 +109,7 @@ button.reset {
   border: 2px solid var(--color-primary-blue);
 
   &::placeholder {
-    color: white;
+    color: var(--color-primary-blue);
     font-style: italic;
     font-weight: bold;
     opacity: .8;
@@ -210,18 +210,31 @@ input[type="submit"]:hover {
 .location_method {
   display: flex;
   justify-content: space-between;
+  animation: fadeIn .5s linear;
 
   & button {
     width: auto;
     font-size: 14px;
+    background-color: white;
+    color: var(--color-primary-blue);
     @media screen and (min-width: 568px) {
       width: 45%;
     }
 
-    &:hover, &:active {
+    &.active, &:hover {
       background-color: var(--color-primary-blue);
       color: white;
     }
+  }
+}
+
+.method {
+  display: none;
+  position: relative;
+  animation: fadeIn .5s linear;
+
+  &.active {
+    display: block;
   }
 }
 
@@ -238,3 +251,16 @@ input[type="submit"]:hover {
 .title_animate:hover {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
 }
+
+/* Keyframes */
+@keyframes fadeIn {
+  0% { 
+    opacity: 0; 
+    right: -10px;
+  }
+  100% { 
+    opacity: 1; 
+    right: 0px;
+  }
+}
+
