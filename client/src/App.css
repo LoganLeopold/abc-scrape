@@ -96,6 +96,10 @@ button.reset {
   width: 100vw;
 }
 
+.fade-in {
+  animation: fadeIn .5s linear;
+}
+
 .form_input {
   width: calc(100% - 16px);
   border: none;
@@ -210,7 +214,6 @@ input[type="submit"]:hover {
 .location_method {
   display: flex;
   justify-content: space-between;
-  animation: fadeIn .5s linear;
 
   & button {
     width: auto;
@@ -229,9 +232,7 @@ input[type="submit"]:hover {
 }
 
 .method {
-  display: none;
   position: relative;
-  animation: fadeIn .5s linear;
 
   &.active {
     display: block;

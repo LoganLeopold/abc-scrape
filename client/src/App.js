@@ -8,7 +8,7 @@ import MethodHousing from './MethodHousing';
 const App = () => {
   const [dropUrl, setDropUrl] = useState('')
   const [listUrl, setListUrl] = useState('')
-  const [currentLocation, setCurrentLocation] = useState('')
+  const [currentLocation, setCurrentLocation] = useState({})
 
   const formRef = useRef(null)
 
@@ -77,8 +77,8 @@ const App = () => {
           <MethodHousing setCurrentLocation={setCurrentLocation}/>
         }
 
-        {dropUrl && currentLocation &&
-          <div className="input_group submissions">
+        {Object.values(currentLocation)[0] &&
+          <div className="input_group submissions fade-in">
             <h2>3. Get closest stores as waypoints.</h2>
             {!listUrl && <input type="submit" value="Get My Link" onClick={processLocations} htmlFor="link_submit"/>}
             { 
