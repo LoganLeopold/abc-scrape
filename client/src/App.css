@@ -214,7 +214,6 @@ input[type="submit"]:hover {
 .location_method {
   display: flex;
   justify-content: space-between;
-  /* animation: fadeIn .5s linear; */
 
   & button {
     width: auto;
@@ -235,7 +234,6 @@ input[type="submit"]:hover {
 .method {
   display: none;
   position: relative;
-  /* animation: fadeIn .5s linear; */
 
   &.active {
     display: block;

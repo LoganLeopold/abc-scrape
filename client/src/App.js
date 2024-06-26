@@ -12,10 +12,7 @@ const App = () => {
   const formRef = useRef(null)
   const currentLocationMethod = Object.keys(currentLocation)[0]
 
-  console.log(listUrl.written)
-
   const resetListUrl = () => { // Resets listUrl if underlying City changes
-    console.log('resetListUrl')
     setListUrl(({[currentLocationMethod]: value, ...listUrl})=>{
       return listUrl
     })
@@ -42,8 +39,7 @@ const App = () => {
 
     try {
       const response = await axios.post(
-        // '/api/processLocations', 
-        'http://localhost:3001/processLocations',
+        '/api/processLocations', 
         payload,
       );
       setListUrl({[currentLocationMethod]: response.data})
