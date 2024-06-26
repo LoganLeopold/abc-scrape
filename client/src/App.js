@@ -39,7 +39,8 @@ const App = () => {
 
     try {
       const response = await axios.post(
-        '/api/processLocations', 
+        // '/api/processLocations', 
+        'http://localhost:3001/processLocations',
         payload,
       );
       setListUrl({[currentLocationMethod]: response.data})

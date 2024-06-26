@@ -47,7 +47,7 @@ const createGooglePlaces = async (addresses) => {
           key: process.env.GOOGLE_MAPS_KEY,
           input: `${add} Virginia ABC`,
           inputtype: "textquery",
-          fields: ['geometry', 'place_id']
+          fields: ['geometry', 'place_id', 'address_components']
         }
       })
       return thisPlace.data
@@ -102,10 +102,22 @@ const distanceFilterPlaces = (placesCollection, currentLocation) => {
     }
     return acc
   },[])
+  'https://www.google.com/maps/place/?q=place_id:ChIJ_1jx0bG_uokRgSfA4S5ysYM'
 
   // sort them by distance and return just the place object of the 10 closest results
   const distanceSortedPlaces = closePlaces.sort((a,b) => a[0] - b[0]).map(place => place[1]).slice(0,10);
   return distanceSortedPlaces;
+}
+
+const createIndividualLinks = (distanceFilteredPlaces) => {
+  console.log(distanceFilteredPlaces)
+  console.log('createIndividualLinks')
+  let individualLinks;
+  if (distanceFilteredPlaces.length > 0) {
+    individualLinks = distanceFilterPlaces.map((place) => {
+      return `https://www.google.com/maps/place/?q=place_id:${place.candidates[0].place_id}`
+    })
+  }
 }
 
 // Make final usable URL
@@ -140,6 +152,8 @@ app.post('/processLocations', async (req, res) => {
     const places = await createGooglePlaces(addresses)
     const currentLocation = await resolveCurrentLocation(req.body.currentLocation)
     const closePlaces = distanceFilterPlaces(places, currentLocation)
+    console.log(closePlaces)
+    // const individualLinks = createIndividualLinks(closePlaces)
     const finalUrl = constructUrl(closePlaces)  
     res.json(finalUrl)
   } catch (err) {
