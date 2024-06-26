@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const Geolocation = ({ setGeolocation, resetListUrl }) => {
+const Geolocation = ({ setGeolocation, resetListUrl, resetListUrlDirect }) => {
   const [currentCoords, setCurrentCoords] = useState('')
   const [status, setStatus] = useState('initialized')
   const [fadeCoords, setFadeCoords] = useState(true)
@@ -14,15 +14,16 @@ const Geolocation = ({ setGeolocation, resetListUrl }) => {
   }
 
   const geoLocateError = (error) => {
+    resetListUrl()
     setStatus('error')  
     // currentCoords takes string, so should work
+    setGeolocation('')
     setCurrentCoords(error.message.length > 0 ? error.message : 'The gelocation encountered an error. Try using a city-state combo for now.')
   }
 
   const onGeoLocation = (e) => {
     e.preventDefault()
     setStatus('fetching')
-    resetListUrl()
     navigator.geolocation.getCurrentPosition(geoLocateSuccess, geoLocateError, {timeout: 20000})
   }
 

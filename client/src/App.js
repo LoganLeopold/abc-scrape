@@ -9,23 +9,18 @@ const App = () => {
   const [dropUrl, setDropUrl] = useState('')
   const [listUrl, setListUrl] = useState({})
   const [currentLocation, setCurrentLocation] = useState('')
-
   const formRef = useRef(null)
-
   const currentLocationMethod = Object.keys(currentLocation)[0]
 
-  const errorMessages = {
-    url: "Add a drop url",
-    location: "You haven't given a proper city, state or used your current location to add coordinates."
-  }
+  console.log(listUrl.written)
 
   const resetListUrl = () => { // Resets listUrl if underlying City changes
-    setListUrl((prev)=>{
-      delete prev[currentLocationMethod]
-      return prev
+    console.log('resetListUrl')
+    setListUrl(({[currentLocationMethod]: value, ...listUrl})=>{
+      return listUrl
     })
   }
-     
+    
   const onUrlInputChange = (e) => {
     setDropUrl(e.target.value)
   }
@@ -51,7 +46,7 @@ const App = () => {
         'http://localhost:3001/processLocations',
         payload,
       );
-      setListUrl({[Object.keys(currentLocation)[0]]: response.data})
+      setListUrl({[currentLocationMethod]: response.data})
     } catch (error) {
       console.log(error)
     }
@@ -59,10 +54,9 @@ const App = () => {
 
   const totalReset = () => {
     setListUrl('')
+    setDropUrl('')
     setCurrentLocation('')
   }
-
-  const method = Object.keys(currentLocation)[0]
 
   return (
     <div className="App">
@@ -90,17 +84,9 @@ const App = () => {
           />
         }
 
-        {/* 
-          - Drop URL
-          - h2 + Input SUBMIT
-            - need the current method to have no listUrl OR currentLocation to be different
-              - need a location comparison and/or to reset location upon type/geo refetch
-              - ^ this is useMemo ^
-            - need 
-        */}
         { dropUrl && 
           <div className="input_group submissions">
-            { currentLocation[method] && !listUrl[method] &&
+            { currentLocation[currentLocationMethod] && !listUrl[currentLocationMethod] &&
               <>
                 <h2>3. Get closest stores as waypoints.</h2>
                 <input type="submit" value="Get My Link" onClick={processLocations} htmlFor="link_submit"/>
@@ -109,7 +95,7 @@ const App = () => {
             { 
               Object.keys(listUrl).includes(currentLocationMethod) &&
                 <>
-                  <a href={listUrl} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
+                  <a href={listUrl[currentLocationMethod]} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
                   <button className='reset' onClick={() => totalReset()}>{'<< Start Over'}</button>
                 </>
             }
