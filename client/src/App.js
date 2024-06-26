@@ -1,31 +1,26 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import Geolocation from './Geolocation';
 import './App.css';
 import './fonts/youre gone.otf'
 import './fonts/youre gone it.otf'
+import MethodHousing from './MethodHousing';
 
 const App = () => {
   const [dropUrl, setDropUrl] = useState('')
-  const [listUrl, setListUrl] = useState('')
-
-  const [currentLocation, setCurrentLocation] = useState(null)
-  const [submitDisabled, setSubmitDisabled] = useState(true)
-  const [locationMethod, setLocationMethod] = useState('')
+  const [listUrl, setListUrl] = useState({})
+  const [currentLocation, setCurrentLocation] = useState('')
   const formRef = useRef(null)
+  const currentLocationMethod = Object.keys(currentLocation)[0]
 
-  const errorMessages = {
-    url: "Add a drop url",
-    location: "You haven't given a proper city, state or used your current location to add coordinates."
+  console.log(listUrl.written)
+
+  const resetListUrl = () => { // Resets listUrl if underlying City changes
+    console.log('resetListUrl')
+    setListUrl(({[currentLocationMethod]: value, ...listUrl})=>{
+      return listUrl
+    })
   }
-
-  const onCurrentLocationChange = (e) => {
-    setCurrentLocation(e.target.value)
-    if (submitDisabled === true && currentLocation.length > 0) {
-      setSubmitDisabled(false)
-    }
-  }
-
+    
   const onUrlInputChange = (e) => {
     setDropUrl(e.target.value)
   }
@@ -36,17 +31,14 @@ const App = () => {
     if (!formRef.current.checkValidity()) { 
       return 
     }
-    // if (locationMethod === 'geolocation' && Object.entries(currentCoords).length === 0) { return }
-
+    
     let payload = { dropUrl }
-    // if (currentCoords.lat) {
-      // payload['currentCoords'] = currentCoords
-    // } else if (currentLocation.length > 0) {
-      // payload['currentLocation'] = currentLocation
-    // } else {
-      // setLocationMethod('')
-      // return 
-    // }
+    if (currentLocation) {
+      // is either returning a typed city + state OR json-stringified coordinates
+      payload['currentLocation'] = Object.values(currentLocation)[0]
+    } else {
+      return 
+    }
 
     try {
       const response = await axios.post(
@@ -54,15 +46,16 @@ const App = () => {
         'http://localhost:3001/processLocations',
         payload,
       );
-      setListUrl(response.data)
+      setListUrl({[currentLocationMethod]: response.data})
     } catch (error) {
       console.log(error)
     }
   }
 
-  const reset = () => {
-    setDropUrl('')
+  const totalReset = () => {
     setListUrl('')
+    setDropUrl('')
+    setCurrentLocation('')
   }
 
   return (
@@ -85,40 +78,25 @@ const App = () => {
         </div>
 
         {dropUrl &&
-          <div className='input_group'>
-            <h2>2. Choose search area.</h2>
-            {locationMethod === '' &&
-              <div className='location_method'>
-                <button onClick={() => setLocationMethod('written')}>A Typed City, State</button>
-                <button onClick={() => setLocationMethod('geolocation')}>Your Current Location</button>
-              </div>
-            }
-
-            {locationMethod === 'written' && (
-              <>
-                <input className="form_input" type="text" name="current_location" placeholder='City, State' onChange={onCurrentLocationChange} htmlFor="link_submit" disabled={locationMethod !== 'written'} required={locationMethod === 'written'}/>
-                <button onClick={()=>{setLocationMethod('geolocation')}} className='back'>{'< Use Geolocation Instead'}</button>
-              </>
-            )}
-            
-            { locationMethod === 'geolocation' && 
-              <Geolocation 
-                changeMethod={()=>{setLocationMethod('written')}}
-                reportCoords={setCurrentLocation}
-              />
-            }
-          </div>
+          <MethodHousing 
+            setCurrentLocation={setCurrentLocation}
+            resetListUrl={resetListUrl}
+          />
         }
 
-        {dropUrl && currentLocation &&
+        { dropUrl && 
           <div className="input_group submissions">
-            <h2>3. Get closest stores as waypoints.</h2>
-            {!listUrl && <input type="submit" value="Get My Link" onClick={processLocations} htmlFor="link_submit"/>}
+            { currentLocation[currentLocationMethod] && !listUrl[currentLocationMethod] &&
+              <>
+                <h2>3. Get closest stores as waypoints.</h2>
+                <input type="submit" value="Get My Link" onClick={processLocations} htmlFor="link_submit"/>
+              </>
+            }
             { 
-              listUrl &&
+              Object.keys(listUrl).includes(currentLocationMethod) &&
                 <>
-                  <a href={listUrl} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
-                  <button className='reset' onClick={() => reset()}>{'<< Start Over'}</button>
+                  <a href={listUrl[currentLocationMethod]} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
+                  <button className='reset' onClick={() => totalReset()}>{'<< Start Over'}</button>
                 </>
             }
           </div>
