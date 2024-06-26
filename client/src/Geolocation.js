@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const Geolocation = ({ setGeolocation, used }) => {
+const Geolocation = ({ setGeolocation, resetListUrl }) => {
   const [currentCoords, setCurrentCoords] = useState('')
   const [status, setStatus] = useState('initialized')
   const [fadeCoords, setFadeCoords] = useState(true)
@@ -22,6 +22,7 @@ const Geolocation = ({ setGeolocation, used }) => {
   const onGeoLocation = (e) => {
     e.preventDefault()
     setStatus('fetching')
+    resetListUrl()
     navigator.geolocation.getCurrentPosition(geoLocateSuccess, geoLocateError, {timeout: 20000})
   }
 
@@ -43,7 +44,10 @@ const Geolocation = ({ setGeolocation, used }) => {
         <p>Fetching the location...</p>
       }
       {status === 'error' &&
+      <>
         <p>{currentCoords}</p>
+        <button onClick={onGeoLocation}>Try Fetch Again</button>
+      </>
       }
     </>
   )

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Geolocation from './Geolocation';
 
-const MethodHousing = ({ setCurrentLocation }) => {
+const MethodHousing = ({ setCurrentLocation, resetListUrl }) => {
   const [method, setMethod] = useState('')
   const [typed, setTyped] = useState('')
   const [geolocated, setGeolocation] = useState('')
@@ -9,13 +9,12 @@ const MethodHousing = ({ setCurrentLocation }) => {
 
   const typedChange = (e) => {
     setTyped(e.target.value)
+    resetListUrl()
   }
 
   useEffect(()=>{
-    console.log("effect" + method)
     setCurrentLocation({[method]: method === 'geolocation' ? geolocated : typed})
     setUsedMethods((prev) => {
-      // if (prev[method] <= 2) prev[method]++
       if (prev[method] <= 2) prev[method]++
       return prev
     })
@@ -56,7 +55,7 @@ const MethodHousing = ({ setCurrentLocation }) => {
         <div className={`method ${method === 'geolocation' ? 'active' : ''} ${ usedMethods['geolocation'] <= 2 ? 'fadeIn' : ''}`}>
           <Geolocation 
             setGeolocation={setGeolocation}
-            used={!usedMethods['geolocation']}
+            resetListUrl={resetListUrl}
           />
         </div>
       }

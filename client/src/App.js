@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 import './fonts/youre gone.otf'
@@ -7,21 +7,25 @@ import MethodHousing from './MethodHousing';
 
 const App = () => {
   const [dropUrl, setDropUrl] = useState('')
-  const [listUrl, setListUrl] = useState('')
+  const [listUrl, setListUrl] = useState({})
   const [currentLocation, setCurrentLocation] = useState('')
 
   const formRef = useRef(null)
-  // const currentLocation = useRef('')
 
-  // const setCurrentLocation = (location) => {
-  //   currentLocation.current = location
-  // }
+  const currentLocationMethod = Object.keys(currentLocation)[0]
 
   const errorMessages = {
     url: "Add a drop url",
     location: "You haven't given a proper city, state or used your current location to add coordinates."
   }
 
+  const resetListUrl = () => { // Resets listUrl if underlying City changes
+    setListUrl((prev)=>{
+      delete prev[currentLocationMethod]
+      return prev
+    })
+  }
+     
   const onUrlInputChange = (e) => {
     setDropUrl(e.target.value)
   }
@@ -80,7 +84,10 @@ const App = () => {
         </div>
 
         {dropUrl &&
-          <MethodHousing setCurrentLocation={setCurrentLocation}/>
+          <MethodHousing 
+            setCurrentLocation={setCurrentLocation}
+            resetListUrl={resetListUrl}
+          />
         }
 
         {/* 
@@ -100,7 +107,7 @@ const App = () => {
               </>
             }
             { 
-              Object.keys(listUrl).includes(Object.keys(currentLocation)[0]) &&
+              Object.keys(listUrl).includes(currentLocationMethod) &&
                 <>
                   <a href={listUrl} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
                   <button className='reset' onClick={() => totalReset()}>{'<< Start Over'}</button>
