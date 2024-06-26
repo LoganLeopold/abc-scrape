@@ -11,6 +11,11 @@ const App = () => {
   const [currentLocation, setCurrentLocation] = useState('')
 
   const formRef = useRef(null)
+  // const currentLocation = useRef('')
+
+  // const setCurrentLocation = (location) => {
+  //   currentLocation.current = location
+  // }
 
   const errorMessages = {
     url: "Add a drop url",
@@ -31,7 +36,7 @@ const App = () => {
     let payload = { dropUrl }
     if (currentLocation) {
       // is either returning a typed city + state OR json-stringified coordinates
-      payload['currentLocation'] = currentLocation
+      payload['currentLocation'] = Object.values(currentLocation)[0]
     } else {
       return 
     }
@@ -42,17 +47,18 @@ const App = () => {
         'http://localhost:3001/processLocations',
         payload,
       );
-      setListUrl(response.data)
+      setListUrl({[Object.keys(currentLocation)[0]]: response.data})
     } catch (error) {
       console.log(error)
     }
   }
 
-  
   const totalReset = () => {
     setListUrl('')
     setCurrentLocation('')
   }
+
+  const method = Object.keys(currentLocation)[0]
 
   return (
     <div className="App">
@@ -77,12 +83,24 @@ const App = () => {
           <MethodHousing setCurrentLocation={setCurrentLocation}/>
         }
 
-        {dropUrl && currentLocation &&
+        {/* 
+          - Drop URL
+          - h2 + Input SUBMIT
+            - need the current method to have no listUrl OR currentLocation to be different
+              - need a location comparison and/or to reset location upon type/geo refetch
+              - ^ this is useMemo ^
+            - need 
+        */}
+        { dropUrl && 
           <div className="input_group submissions">
-            <h2>3. Get closest stores as waypoints.</h2>
-            {!listUrl && <input type="submit" value="Get My Link" onClick={processLocations} htmlFor="link_submit"/>}
+            { currentLocation[method] && !listUrl[method] &&
+              <>
+                <h2>3. Get closest stores as waypoints.</h2>
+                <input type="submit" value="Get My Link" onClick={processLocations} htmlFor="link_submit"/>
+              </>
+            }
             { 
-              listUrl &&
+              Object.keys(listUrl).includes(Object.keys(currentLocation)[0]) &&
                 <>
                   <a href={listUrl} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
                   <button className='reset' onClick={() => totalReset()}>{'<< Start Over'}</button>

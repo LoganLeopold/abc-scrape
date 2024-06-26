@@ -1,14 +1,16 @@
 import { useState } from 'react';
 
-const Geolocation = ({ setGeolocation }) => {
+const Geolocation = ({ setGeolocation, used }) => {
   const [currentCoords, setCurrentCoords] = useState('')
   const [status, setStatus] = useState('initialized')
+  const [fadeCoords, setFadeCoords] = useState(true)
 
   const geoLocateSuccess = (data) => {
     setStatus('success')
     const { latitude, longitude } = data.coords
     setCurrentCoords({lat: latitude, lon: longitude})
     setGeolocation(JSON.stringify({lat: latitude, lon: longitude}))
+    setTimeout(()=>{setFadeCoords(false)}, 1000)
   }
 
   const geoLocateError = (error) => {
@@ -29,7 +31,7 @@ const Geolocation = ({ setGeolocation }) => {
         <button type="submit" value="Fetch Location >" onClick={onGeoLocation} htmlFor="location_fetch">Fetch Location</button>
       }
       {status === 'success' && 
-        <div className="geolocations">
+        <div className={`geolocations ${fadeCoords ? 'fadeIn' : ''}`}>
           <label>Latitude:</label>
           <input className="form_input geo" name="lat" value={currentCoords.lat} required/>
           <label>Longitude</label>
@@ -43,7 +45,6 @@ const Geolocation = ({ setGeolocation }) => {
       {status === 'error' &&
         <p>{currentCoords}</p>
       }
-      {/* <button className='back' onClick={()=>{changeMethod('written')}}>{'< Use City, State Instead'}</button> */}
     </>
   )
 }
