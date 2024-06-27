@@ -110,21 +110,24 @@ const App = () => {
 
         {/* { dropUrl && currentLocation[currentLocationMethod] && !results[currentLocationMethod] && currentState !== 'error' && */}
         { dropUrl && currentLocation[currentLocationMethod] && currentState !== 'error' &&
-          <div className='input_group fadeIn'>
+          <div className={`input_group fadeIn`}>
             <h2>3. Get closest stores as waypoints.</h2>
-            <input 
-            type="submit" 
-            value="Get My Link" 
-            onClick={(e)=>{
-              processLocations(e); 
-              setProcessState(({[currentLocationMethod]: value, ...processState})=>{
-                return {
-                  [currentLocationMethod]: 'fetching',
-                  ...processState
-                }
-              })
-            }} 
-            htmlFor="link_submit"/>
+            <button
+              type="submit" 
+              className={`${Object.keys(results).length > 0 ? 'cursor-disable' : ''}`}
+              disabled={`${Object.keys(results).length > 0 ? 'disabled' : ''}`}
+              onClick={(e)=>{
+                processLocations(e); 
+                setProcessState(({[currentLocationMethod]: value, ...processState})=>{
+                  return {
+                    [currentLocationMethod]: 'fetching',
+                    ...processState
+                  }
+                })
+              }} 
+            >
+              {`${Object.keys(results).length > 0 ? 'Results Already Retrieved' : 'Get Closest Stores'}`}
+            </button>
           </div>
         }
         { 
