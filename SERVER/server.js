@@ -141,7 +141,6 @@ app.post('/processLocations', async (req, res) => {
     const currentLocation = await resolveCurrentLocation(req.body.currentLocation)
     const closePlaces = distanceFilterPlaces(places, currentLocation)
     const finalUrl = constructUrl(closePlaces)  
-    console.log(finalUrl)
     res.json(finalUrl)
   } catch (err) {
     res.send(err)

@@ -44,8 +44,7 @@ const App = () => {
 
     try {
       const response = await axios.post(
-        // '/api/processLocations', 
-        'http://localhost:3001/processLocations',
+        '/api/processLocations',
         payload,
       );
       if (Object.keys(response.data).length !== 0) {
