@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 import './fonts/youre gone.otf'
@@ -9,15 +9,20 @@ const App = () => {
   const [dropUrl, setDropUrl] = useState('')
   const [listUrl, setListUrl] = useState({})
   const [currentLocation, setCurrentLocation] = useState('')
+  const [processState, setProcessState] = useState('initialized')
   const formRef = useRef(null)
   const currentLocationMethod = Object.keys(currentLocation)[0]
+  const currentState = processState[currentLocationMethod]
 
   const resetListUrl = () => { // Resets listUrl if underlying City changes
     setListUrl(({[currentLocationMethod]: value, ...listUrl})=>{
       return listUrl
     })
+    setProcessState(({[currentLocationMethod]: value, ...processLocations})=>{
+      return processLocations
+    })
   }
-    
+
   const onUrlInputChange = (e) => {
     setDropUrl(e.target.value)
   }
@@ -43,7 +48,27 @@ const App = () => {
         'http://localhost:3001/processLocations',
         payload,
       );
-      setListUrl({[currentLocationMethod]: response.data})
+      if (Object.keys(response.data).length !== 0) {
+        setProcessState(({[currentLocationMethod]: value, ...processState})=>{
+          return {
+            [currentLocationMethod]: 'success',
+            ...processState
+          }
+        })
+        setListUrl(({[currentLocationMethod]: value, ...listUrl})=>{
+          return {
+            [currentLocationMethod]: response.data,
+            ...listUrl
+          }
+        })
+      } else {
+        setProcessState(({[currentLocationMethod]: value, ...processState})=>{
+          return {
+            [currentLocationMethod]: 'error',
+            ...processState
+          }
+        })
+      }
     } catch (error) {
       console.log(error)
     }
@@ -83,18 +108,38 @@ const App = () => {
 
         { dropUrl && 
           <div className="input_group submissions">
-            { currentLocation[currentLocationMethod] && !listUrl[currentLocationMethod] &&
+            { currentLocation[currentLocationMethod] && !listUrl[currentLocationMethod] && currentState !== 'error' &&
               <>
                 <h2>3. Get closest stores as waypoints.</h2>
-                <input type="submit" value="Get My Link" onClick={processLocations} htmlFor="link_submit"/>
+                <input 
+                type="submit" 
+                value="Get My Link" 
+                onClick={(e)=>{
+                  processLocations(e); 
+                  setProcessState(({[currentLocationMethod]: value, ...processState})=>{
+                    return {
+                      [currentLocationMethod]: 'fetching',
+                      ...processState
+                    }
+                  })
+                }} 
+                htmlFor="link_submit"/>
               </>
             }
             { 
-              Object.keys(listUrl).includes(currentLocationMethod) &&
+              Object.keys(listUrl).includes(currentLocationMethod) && currentState === 'success' &&
                 <>
                   <a href={listUrl[currentLocationMethod]} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
                   <button className='reset' onClick={() => totalReset()}>{'<< Start Over'}</button>
                 </>
+            }
+            {
+              currentState === 'fetching' && 
+              <p>Fetching for you!</p>
+            }
+            {
+              currentState === 'error' &&
+              <p>There weren't any results close to the location you chose. Check on your city/geolocation.</p>
             }
           </div>
         }
