@@ -45,11 +45,9 @@ const App = () => {
 
     try {
       const response = await axios.post(
-        // '/api/processLocations', 
-        'http://localhost:3001/processLocations',
+        '/api/processLocations', 
         payload,
       );
-      console.log(response.data)
       if (Object.keys(response.data).length !== 0) {
         setProcessState(({[currentLocationMethod]: value, ...processState})=>{
           return {
@@ -108,7 +106,6 @@ const App = () => {
           />
         }
 
-        {/* { dropUrl && currentLocation[currentLocationMethod] && !results[currentLocationMethod] && currentState !== 'error' && */}
         { dropUrl && currentLocation[currentLocationMethod] && currentState !== 'error' &&
           <div className={`input_group fadeIn`}>
             <h2>3. Get closest stores as waypoints.</h2>

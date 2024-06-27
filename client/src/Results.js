@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
 const Results = (props) => {
-  console.log(props)
   const [theseResults, setTheseResults] = useState(props)
   const {results, totalReset} = theseResults
   const {finalWaypoints, individualLinks} = results 

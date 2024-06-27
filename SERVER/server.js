@@ -102,7 +102,6 @@ const distanceFilterPlaces = (placesCollection, currentLocation) => {
     }
     return acc
   },[])
-  'https://www.google.com/maps/place/?q=place_id:ChIJ_1jx0bG_uokRgSfA4S5ysYM'
 
   // sort them by distance and return just the place object of the 10 closest results
   const distanceSortedPlaces = closePlaces.sort((a,b) => a[0] - b[0]).map(place => place[1]).slice(0,10);
