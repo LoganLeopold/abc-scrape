@@ -4,6 +4,7 @@ import './App.css';
 import './fonts/youre gone.otf'
 import './fonts/youre gone it.otf'
 import MethodHousing from './MethodHousing';
+import Results from './Results';
 
 const App = () => {
   const [dropUrl, setDropUrl] = useState('')
@@ -107,42 +108,35 @@ const App = () => {
           />
         }
 
-        { dropUrl && 
-          <div className="input_group submissions">
-            { currentLocation[currentLocationMethod] && !results[currentLocationMethod] && currentState !== 'error' &&
-              <>
-                <h2>3. Get closest stores as waypoints.</h2>
-                <input 
-                type="submit" 
-                value="Get My Link" 
-                onClick={(e)=>{
-                  processLocations(e); 
-                  setProcessState(({[currentLocationMethod]: value, ...processState})=>{
-                    return {
-                      [currentLocationMethod]: 'fetching',
-                      ...processState
-                    }
-                  })
-                }} 
-                htmlFor="link_submit"/>
-              </>
-            }
-            { 
-              Object.keys(results).includes(currentLocationMethod) && currentState === 'success' &&
-                <>
-                  <a href={results[currentLocationMethod].finalWaypoints} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
-                  <button className='reset' onClick={() => totalReset()}>{'<< Start Over'}</button>
-                </>
-            }
-            {
-              currentState === 'fetching' && 
-              <p>Fetching for you!</p>
-            }
-            {
-              currentState === 'error' &&
-              <p>There weren't any results close to the location you chose. Check on your city/geolocation.</p>
-            }
-          </div>
+        { dropUrl && currentLocation[currentLocationMethod] && !results[currentLocationMethod] && currentState !== 'error' &&
+          <>
+            <h2>3. Get closest stores as waypoints.</h2>
+            <input 
+            type="submit" 
+            value="Get My Link" 
+            onClick={(e)=>{
+              processLocations(e); 
+              setProcessState(({[currentLocationMethod]: value, ...processState})=>{
+                return {
+                  [currentLocationMethod]: 'fetching',
+                  ...processState
+                }
+              })
+            }} 
+            htmlFor="link_submit"/>
+          </>
+        }
+        { 
+          dropUrl && Object.keys(results).includes(currentLocationMethod) && currentState === 'success' &&
+            <Results totalReset={totalReset} results={results[currentLocationMethod]}/>
+        }
+        {
+          currentState === 'fetching' && 
+          <p>Fetching for you!</p>
+        }
+        {
+          currentState === 'error' &&
+          <p>There weren't any results close to the location you chose. Check on your city/geolocation.</p>
         }
       </form>
     </div>

@@ -24,7 +24,7 @@ const MethodHousing = ({ setCurrentLocation, resetResults }) => {
     <div className='input_group'>
       <h2>2. Choose search method.</h2>
 
-      <div className='location_method fadeIn'>
+      <div className='button--select fadeIn'>
         <button 
           className={`${method === 'written' ? 'active' : ''}`}
           onClick={(e) => {

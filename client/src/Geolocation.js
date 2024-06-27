@@ -22,6 +22,7 @@ const Geolocation = ({ setGeolocation, resetResults }) => {
   }
 
   const onGeoLocation = (e) => {
+    setGeolocation('')
     resetResults()
     e.preventDefault()
     setStatus('fetching')

@@ -110,15 +110,12 @@ const distanceFilterPlaces = (placesCollection, currentLocation) => {
 }
 
 const createIndividualLinks = (distanceFilteredPlaces) => {
-  console.log('createIndividualLinks')
   let individualLinks;
   if (distanceFilteredPlaces.length > 0) {
-    console.log(true)
     individualLinks = distanceFilteredPlaces.map((place) => {
-      console.log(place)
       return {
         link: `https://www.google.com/maps/place/?q=place_id:${place.candidates[0].place_id}`,
-        address: place.candidates[0].formaatted_address
+        address: place.candidates[0].formatted_address
       }
     })
   }
