@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Geolocation from './Geolocation';
 
-const MethodHousing = ({ setCurrentLocation, resetListUrl }) => {
+const MethodHousing = ({ setCurrentLocation, resetResults }) => {
   const [method, setMethod] = useState('')
   const [typed, setTyped] = useState('')
   const [geolocated, setGeolocation] = useState('')
@@ -9,7 +9,7 @@ const MethodHousing = ({ setCurrentLocation, resetListUrl }) => {
 
   const typedChange = (e) => {
     setTyped(e.target.value)
-    resetListUrl()
+    resetResults()
   }
 
   useEffect(()=>{
@@ -24,7 +24,7 @@ const MethodHousing = ({ setCurrentLocation, resetListUrl }) => {
     <div className='input_group'>
       <h2>2. Choose search method.</h2>
 
-      <div className='location_method fadeIn'>
+      <div className='button--select fadeIn'>
         <button 
           className={`${method === 'written' ? 'active' : ''}`}
           onClick={(e) => {
@@ -55,7 +55,7 @@ const MethodHousing = ({ setCurrentLocation, resetListUrl }) => {
         <div className={`method ${method === 'geolocation' ? 'active' : ''} ${ usedMethods['geolocation'] <= 2 ? 'fadeIn' : ''}`}>
           <Geolocation 
             setGeolocation={setGeolocation}
-            resetListUrl={resetListUrl}
+            resetResults={resetResults}
           />
         </div>
       }
