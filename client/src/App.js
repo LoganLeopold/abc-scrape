@@ -7,16 +7,16 @@ import MethodHousing from './MethodHousing';
 
 const App = () => {
   const [dropUrl, setDropUrl] = useState('')
-  const [listUrl, setListUrl] = useState({})
+  const [results, setResults] = useState({})
   const [currentLocation, setCurrentLocation] = useState('')
   const [processState, setProcessState] = useState('initialized')
   const formRef = useRef(null)
   const currentLocationMethod = Object.keys(currentLocation)[0]
   const currentState = processState[currentLocationMethod]
 
-  const resetListUrl = () => { // Resets listUrl if underlying City changes
-    setListUrl(({[currentLocationMethod]: value, ...listUrl})=>{
-      return listUrl
+  const resetResults = () => { // Resets results if underlying City changes
+    setResults(({[currentLocationMethod]: value, ...results})=>{
+      return results
     })
     setProcessState(({[currentLocationMethod]: value, ...processLocations})=>{
       return processLocations
@@ -48,6 +48,7 @@ const App = () => {
         'http://localhost:3001/processLocations',
         payload,
       );
+      console.log(response.data)
       if (Object.keys(response.data).length !== 0) {
         setProcessState(({[currentLocationMethod]: value, ...processState})=>{
           return {
@@ -55,10 +56,10 @@ const App = () => {
             ...processState
           }
         })
-        setListUrl(({[currentLocationMethod]: value, ...listUrl})=>{
+        setResults(({[currentLocationMethod]: value, ...results})=>{
           return {
             [currentLocationMethod]: response.data,
-            ...listUrl
+            ...results
           }
         })
       } else {
@@ -75,7 +76,7 @@ const App = () => {
   }
 
   const totalReset = () => {
-    setListUrl('')
+    setResults('')
     setDropUrl('')
     setCurrentLocation('')
   }
@@ -102,13 +103,13 @@ const App = () => {
         {dropUrl &&
           <MethodHousing 
             setCurrentLocation={setCurrentLocation}
-            resetListUrl={resetListUrl}
+            resetResults={resetResults}
           />
         }
 
         { dropUrl && 
           <div className="input_group submissions">
-            { currentLocation[currentLocationMethod] && !listUrl[currentLocationMethod] && currentState !== 'error' &&
+            { currentLocation[currentLocationMethod] && !results[currentLocationMethod] && currentState !== 'error' &&
               <>
                 <h2>3. Get closest stores as waypoints.</h2>
                 <input 
@@ -127,9 +128,9 @@ const App = () => {
               </>
             }
             { 
-              Object.keys(listUrl).includes(currentLocationMethod) && currentState === 'success' &&
+              Object.keys(results).includes(currentLocationMethod) && currentState === 'success' &&
                 <>
-                  <a href={listUrl[currentLocationMethod]} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
+                  <a href={results[currentLocationMethod].finalWaypoints} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
                   <button className='reset' onClick={() => totalReset()}>{'<< Start Over'}</button>
                 </>
             }

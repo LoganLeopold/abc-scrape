@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const Geolocation = ({ setGeolocation, resetListUrl }) => {
+const Geolocation = ({ setGeolocation, resetResults }) => {
   const [currentCoords, setCurrentCoords] = useState('')
   const [status, setStatus] = useState('initialized')
   const [fadeCoords, setFadeCoords] = useState(true)
@@ -14,7 +14,7 @@ const Geolocation = ({ setGeolocation, resetListUrl }) => {
   }
 
   const geoLocateError = (error) => {
-    resetListUrl()
+    resetResults()
     setStatus('error')  
     // currentCoords takes string, so should work
     setGeolocation('')
@@ -22,7 +22,7 @@ const Geolocation = ({ setGeolocation, resetListUrl }) => {
   }
 
   const onGeoLocation = (e) => {
-    resetListUrl()
+    resetResults()
     e.preventDefault()
     setStatus('fetching')
     navigator.geolocation.getCurrentPosition(geoLocateSuccess, geoLocateError, {timeout: 20000})
