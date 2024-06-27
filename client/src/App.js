@@ -108,8 +108,9 @@ const App = () => {
           />
         }
 
-        { dropUrl && currentLocation[currentLocationMethod] && !results[currentLocationMethod] && currentState !== 'error' &&
-          <>
+        {/* { dropUrl && currentLocation[currentLocationMethod] && !results[currentLocationMethod] && currentState !== 'error' && */}
+        { dropUrl && currentLocation[currentLocationMethod] && currentState !== 'error' &&
+          <div className='input_group fadeIn'>
             <h2>3. Get closest stores as waypoints.</h2>
             <input 
             type="submit" 
@@ -124,7 +125,7 @@ const App = () => {
               })
             }} 
             htmlFor="link_submit"/>
-          </>
+          </div>
         }
         { 
           dropUrl && Object.keys(results).includes(currentLocationMethod) && currentState === 'success' &&

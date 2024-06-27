@@ -244,7 +244,7 @@ input[type="submit"]:hover {
 .results {
   & > p {
     display: none;
-    font-size: 12px;
+    font-size: 14px;
     margin: 20px 0 25px 0;;
 
     &.active {
