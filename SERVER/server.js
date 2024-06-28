@@ -113,7 +113,7 @@ const createIndividualLinks = (distanceFilteredPlaces) => {
   if (distanceFilteredPlaces.length > 0) {
     individualLinks = distanceFilteredPlaces.map((place) => {
       return {
-        link: `https://www.google.com/maps/place/?q=place_id:${place.candidates[0].place_id}`,
+        link: `https://www.google.com/maps/search/?api=1&query=Google&query_place_id=${place.candidates[0].place_id}`,
         address: place.candidates[0].formatted_address
       }
     })

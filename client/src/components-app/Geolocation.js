@@ -36,8 +36,10 @@ const Geolocation = ({ setGeolocation, resetResults }) => {
       }
       {status === 'success' && 
         <div className={`geolocations ${fadeCoords ? 'fadeIn' : ''}`}>
-          <label>Latitude: {currentCoords.lat}</label>
-          <label>Longitude: {currentCoords.lon}</label>
+          <div>
+            <p><span>Latitude:</span><span>  {currentCoords.lat}</span></p>
+            <p><span>Longitude:</span><span>  {currentCoords.lon}</span></p>
+          </div>
           <button onClick={onGeoLocation} className=''>{'Re-fetch Coordinates'}</button>
         </div>
       }

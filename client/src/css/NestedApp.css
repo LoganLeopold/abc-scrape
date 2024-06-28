@@ -5,34 +5,34 @@
 
 @font-face {
   font-family: "Alfarn", sans-serif;
-  src: url("./fonts/Alfarn.otf") format("opentype");
+  src: url("../fonts/Alfarn.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "gone";
-  src: local("youre gone"), url("./fonts/youre\ gone.otf") format('opentype');
+  src: local("youre gone"), url("../fonts/youre\ gone.otf") format('opentype');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: "gone";
-  src: local("youre gone it"), url("./fonts/youre\ gone it.otf") format('opentype');
+  src: local("youre gone it"), url("../fonts/youre\ gone it.otf") format('opentype');
   font-weight: bold;
   font-style: italic;
 }
 
 @font-face {
   font-family: "library";
-  src: local("Library 3 am"), url("./fonts/Library\ 3\ am.otf") format('opentype');
+  src: local("Library 3 am"), url("../fonts/Library\ 3\ am.otf") format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 
 .App {
-  height: 1800px;
+  height: 1850px;
   max-width: 400px;
   padding: 0 25px;
   text-align: center;
@@ -135,41 +135,34 @@ button.reset {
 }
 
 .geolocations {
-  display: grid;  
-  grid-template-areas: 
-    "geolabel1 geolabel2"
-    "geodata1 geodata2"
-    "reset reset";
-  column-gap: 10px;
-
-  & .form_input {
-    &:first-of-type {
-      grid-area: geodata1;
-    }
-    &:last-of-type {
-      grid-area: geodata2;
-    }
-  }
+  display: flex;
+  flex-direction: column;
 
   & button {
-    grid-area: reset;
     margin-left: auto;
     margin-right: auto;
   }
 
-  & label {
-    text-align: left;
-    font-weight: bold;
-    font-size: 16px;
-    margin-top: 10px;
-    margin-bottom: 3px;
-    color: var(--color-primary-blue);
+  & div {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 20px 0 10px 0;
+    border: 2px solid var(--color-primary-blue);
+    padding: 10px;
+    border-radius: 20px;
 
-    &:first-of-type {
-      grid-area: geolabel1;
-    }
-    &:last-of-type {
-      grid-area: geolabel2;
+    p {
+      text-align: left;
+      font-weight: bold;
+      word-wrap: anywhere;
+      font-size: 16px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      color: var(--color-primary-blue);
+  
+      &:first-of-type {
+        margin-right: 5px;
+      }
     }
   }
 }
@@ -219,10 +212,6 @@ input[type="submit"]:hover {
   & button {
     width: 45%;
     font-size: 14px;
-
-    /* @media screen and (min-width: 568px) {
-      width: 45%;
-    } */
   }
 }
 
@@ -304,4 +293,3 @@ input[type="submit"]:hover {
     right: 0px;
   }
 }
-

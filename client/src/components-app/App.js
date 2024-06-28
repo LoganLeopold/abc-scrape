@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import axios from 'axios';
-import './App.css';
-import './fonts/youre gone.otf'
-import './fonts/youre gone it.otf'
+import '../css/App.css';
+import '../fonts/youre gone.otf'
+import '../fonts/youre gone it.otf'
 import MethodHousing from './MethodHousing';
 import Results from './Results';
 
@@ -11,16 +11,24 @@ const App = () => {
   const [results, setResults] = useState({})
   const [currentLocation, setCurrentLocation] = useState('')
   const [processState, setProcessState] = useState('initialized')
+  const [currentError, setCurrentError] = useState('')
   const formRef = useRef(null)
   const currentLocationMethod = Object.keys(currentLocation)[0]
   const currentState = processState[currentLocationMethod]
+  const errors = {
+    timeout: "Sorry - the server is taking too long. We're experiencing an error. Eeeembarassing.",
+    emptyResponse: "There weren't any results close to the location you chose. Check on your city/geolocation."
+  }
 
   const resetResults = () => { // Resets results if underlying City changes
     setResults(({[currentLocationMethod]: value, ...results})=>{
       return results
     })
     setProcessState(({[currentLocationMethod]: value, ...processLocations})=>{
-      return processLocations
+      return {
+        [currentLocationMethod]: 'initialized',
+        ...processLocations
+      }
     })
   }
 
@@ -45,8 +53,10 @@ const App = () => {
 
     try {
       const response = await axios.post(
-        '/api/processLocations', 
+        // '/api/processLocations', 
+        'http://localhost:3001/processLocations',
         payload,
+        {timeout: 15000},
       );
       if (Object.keys(response.data).length !== 0) {
         setProcessState(({[currentLocationMethod]: value, ...processState})=>{
@@ -70,7 +80,17 @@ const App = () => {
         })
       }
     } catch (error) {
-      console.log(error)
+      if (error.message.includes('timeout')) {
+        setCurrentError(errors.timeout)
+      } else {
+        setCurrentError(errors.emptyResponse)
+      }
+      setProcessState(({[currentLocationMethod]: value, ...processState})=>{
+        return {
+          [currentLocationMethod]: 'error',
+          ...processState
+        }
+      })
     }
   }
 
@@ -137,7 +157,7 @@ const App = () => {
         }
         {
           currentState === 'error' &&
-          <p>There weren't any results close to the location you chose. Check on your city/geolocation.</p>
+          <p>{currentError}</p>
         }
       </form>
     </div>
