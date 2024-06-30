@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+# ABC Assist 
+### Premise
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Virginia Alcoholic Beverage Control Authority (ABC) hatched a way to make access to highly prized products more democratic. These special release products are sent out to randomly selected ABC stores, and then their sale is both opened and randomly announced at the same time. The way to be notified of these releases is via their email newsletter, through which you are sent a link that looks like [this](https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html). It contains the locations through the state that are part of that special release. 
 
-## Available Scripts
+Living in Washington, D.C., there are plenty of stores nearby for these releases. The challenges is two-fold. Firstly, when this email goes out, there is a mad rush on the locations. One afternoon I was sat across the street from one of the locations in a coffee shop remote working when the email went out. I finished up what I was doing for a moment and walked across not twenty minutes after the email went out. The line was already almost out the door with half of the products gone.
 
-In the project directory, you can run:
+Secondly is that these closest locations are scattered throughout Northern Virginia, a land of many townships and municipalities. When you get that link and live in the area, it is tough to sort through the townships and find the store closest to you in a truly quick and easy manner. 
 
-### `npm start`
+This project solves that problem. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Purpose
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+This tool is of personal practical use to me, but I of course endeavored to solve this highly practical problem with a set of tech on which I could expand my skill set. I really wanted to dive deeper into the basic AWS application architecture and use it to host something public that I scaffolded. I also wanted to get more comfortable with Docker and the AWS + Docker combo. Node and React are familiar, but this was still good practice and the opportunity to do something from scratch, trying to keep it as simple as possible. 
 
-### `npm test`
+### Approach and Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The simple goal is to give the user a way to take the url they're sent and get their closest locations from it. The UI gives them a way to geolocate from the browser and to use a typed city + state combo instead of that (in case the gelocation is failing for some reason).
 
-### `npm run build`
+Concepts I wanted to explore:
+* Web scraping (making useful data out of the URL's HTML) 
+* Devops - Docker + AWS
+* As always, strengthen React patterns
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The resulting stack:
+* UI: React
+* Server: Node 
+* Application Server: Nginx
+* Application Container: Docker
+* Domain: GoDaddy
+* Infrastructure/Hosting: AWS
+  * Route 53
+  * Network Load Balancer
+  * EC2
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### Monolithic Repo Structure 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+I knew this app would end up being relatively simple, at least for Version 1. Despite the benefits of separating my server and client, I thought having everything contained would teach me more about networking *and* make it simpler to iterate. After development of V1, I stand by that assumption. Having one Git flow and one deployment for the whole thing made the process quick. I iterated locally, spun up the local Docker environment with docker-compose as a "staging" test, and then would deploy to EC2 as production (unreleased, so no downtime concerns.)
 
-### `npm run eject`
+For this approach I leaned on [this template](https://www.webscale.com/engineering-education/build-and-dockerize-a-full-stack-react-app-with-node-js-mysql-and-nginx/) by [Moses Maina](https://github.com/mosesreigns) as a starting point. 
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Next Steps
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### Devops
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+I got the baseline infrastructure in place, but I want to go the next-level deep with making this a truly highly-available application. Auto-scaling is crucial (especially in case this blows up amongst Virginians as a resource). Also, I'm really interseted in developer tooling and I want to create a healthy pipleine deployment process for this. This would ideally include a way to make changes to just the server or the client side and push those up into the architecture. Either way, the priority is a way to deploy new changes, even if it starts with requiring redeployment of this whole composed container system. 
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Oh, additionally, I need a better set of environment variables to allow for making this work more smoothly locally instead of having to edit the post request URL for the client when I'm doing local dev. Ideally I'd set up a watch-style local development server for the BE and FE. I'm basically there on the BE with nodemon. 
 
-## Learn More
+#### Server
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+I see a lot of opportunity here. One concept for future dev is to have a service on AWS listening for email activity and to process each and every drop that comes through. The data would be compiled and I would be able to create a dashboard for viewing that data, potentially getting into all kinds of things. Maybe using ML to make predictions on patterns for future drops. Maybe trying to use statistics to do that myself. I'd also be able to serve the latest drop at the top of abcassist.info automatically. 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### Client
 
-### Code Splitting
+Is an application ever truly finished? I think of David Fincher's "Movies aren't finished. They are abandoned." quote here. At the time of this writing, I need significant styling work to be proud of what I've produced. It's good enough for V1 though, and this project has had a long enough arc before public consumption. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Run It
 
-### Analyzing the Bundle Size
+This project will run in docker from the compose with a simple "docker-compose up --build". Of course you'll need to have docker installed. You can also run "npm install" && "npm run start" in both the SERVER and client directories to get a client server on localhost:3000 and the BE running on localhost:3001. As aforementioned, you'll have to manually edit the post request URL in ./client/components-app/App.js to be 'http://localhost:3001/processLocations' to query the BE. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
