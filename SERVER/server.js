@@ -81,7 +81,6 @@ const getCurrentLocationPlace = async (placeString) => {
       return error
     }
   } else {
-    console.log("Returning RichmondResult")
     return ArlingtonResult
   }
 }
@@ -168,11 +167,9 @@ app.post('/processLocations', async (req, res) => {
     const currentLocation = await resolveCurrentLocation(req.body.currentLocation)
 
     const closePlaces = distanceFilterPlaces(places, currentLocation)
-    console.log(closePlaces)
     const individualLinks = createIndividualLinks(closePlaces)
     const finalWaypoints = constructUrl(closePlaces)  
     res.json({finalWaypoints, individualLinks})
-    throw new Error("formatted_address was not requested when you made the dummy data, so it's not there now")
   } catch (err) {
     res.send(err)
   }

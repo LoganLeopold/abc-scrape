@@ -25,7 +25,7 @@ services:
       context: ./SERVER
     volumes:
       - /app/node_modules
-      - ./server:/app
+      - ./SERVER:/app
     environment:
       <<: *common-variables
 

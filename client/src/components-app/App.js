@@ -10,7 +10,7 @@ const App = () => {
   const [dropUrl, setDropUrl] = useState('')
   const [results, setResults] = useState({})
   const [currentLocation, setCurrentLocation] = useState('')
-  const [processState, setProcessState] = useState('initialized')
+  const [processState, setProcessState] = useState({written:'initialized', geolocation:'initialized'})
   const [currentError, setCurrentError] = useState('')
   const formRef = useRef(null)
   const currentLocationMethod = Object.keys(currentLocation)[0]
@@ -21,6 +21,7 @@ const App = () => {
   }
 
   const resetResults = () => { // Resets results if underlying City changes
+    console.log('resetResults')
     setResults(({[currentLocationMethod]: value, ...results})=>{
       return results
     })
@@ -53,7 +54,8 @@ const App = () => {
 
     try {
       const response = await axios.post(
-        '/api/processLocations', 
+        // '/api/processLocations', 
+        'http://localhost:3001/processLocations',
         payload,
         {timeout: 15000},
       );
@@ -130,8 +132,8 @@ const App = () => {
             <h2>3. Get closest stores as waypoints.</h2>
             <button
               type="submit" 
-              className={`${Object.keys(results).length > 0 ? 'cursor-disable' : ''}`}
-              disabled={`${Object.keys(results).length > 0 ? 'disabled' : ''}`}
+              className={`${currentState !== 'initialized' ? 'cursor-disable' : ''}`}
+              disabled={`${currentState !== 'initialized' ? 'disabled' : ''}`}
               onClick={(e)=>{
                 processLocations(e); 
                 setProcessState(({[currentLocationMethod]: value, ...processState})=>{
@@ -142,7 +144,7 @@ const App = () => {
                 })
               }} 
             >
-              {`${Object.keys(results).length > 0 ? 'Results Already Retrieved' : 'Get Closest Stores'}`}
+              {`${currentState !== 'initialized' ? 'Results Already Retrieved' : 'Get Closest Stores'}`}
             </button>
           </div>
         }
