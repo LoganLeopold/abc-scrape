@@ -58,7 +58,7 @@ Is an application ever truly finished? I think of David Fincher's "Movies aren't
 ### Run It
 
 #### Env Variables
-##### SERVER
+The server needs access to these, so in ./SERVER I use an .env and place the following in there:
 * GOOGLE_MAPS_KEY= *You'll need a Google API Key [(here's a decent start)](https://developers.google.com/maps/documentation/places/web-service/cloud-setup) to query the APIs I use in this project. You get a good amount of credits, but it does cost. That's why I have dummydata in use.*
 * NODE_ENV= 
   * *dev || prod - dev will use the dummyData and not cost you API pings*
