@@ -6,6 +6,7 @@ const Results = (props) => {
   const {finalWaypoints, individualLinks} = results 
   const isEmpty = Object.keys(results).length > 0
 
+  console.log("RESULTS")
   useEffect(()=>{
     setTheseResults(props)
   },[props])
@@ -35,11 +36,11 @@ const Results = (props) => {
           Circuit Link
         </button>
       </div>
-      <p className={`${selected === 'waypoints' ? 'active' : ''}`}>This creates a link that routes you to all 10 closest locations as a circuit. You may need to rearrange the order for an optimal route. </p>
+      <p className={`${selected === 'waypoints' ? 'active' : ''}`}>This creates a link that routes you to up to 10 closest locations as a circuit. You may need to rearrange the order for an optimal route. </p>
       <div className={`result-option ${selected === 'waypoints' ? 'active' : ''}`}>
         <a href={finalWaypoints} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
       </div>
-      <p className={`${selected === 'list' ? 'active' : ''}`}>A list of the top 10 closest locations.</p>
+      <p className={`${selected === 'list' ? 'active' : ''}`}>A list of up to the top 10 closest locations.</p>
       <div className={`result-option ${selected === 'list' ? 'active' : ''}`}>
         <div className='links'>
           { 

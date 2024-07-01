@@ -8,7 +8,6 @@ const MethodHousing = ({ setCurrentLocation, resetResults }) => {
   const [usedMethods, setUsedMethods] = useState({'written': 0, 'geolocation': 0}) // just for one-time fadeIn purposes
 
   const typedChange = (e) => {
-    console.log("Typed change")
     setTyped(e.target.value)
     resetResults()
   }

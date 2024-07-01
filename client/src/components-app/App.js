@@ -17,11 +17,10 @@ const App = () => {
   const currentState = processState[currentLocationMethod]
   const errors = {
     timeout: "Sorry - the server is taking too long. We're experiencing an error. Eeeembarassing.",
-    emptyResponse: "There weren't any results close to the location you chose. Check on your city/geolocation."
+    emptyResponse: "There weren't any results close to the location you chose. Check on your city/geolocation. If you know there are close locations and this is in-error, please reach out!"
   }
 
   const resetResults = () => { // Resets results if underlying City changes
-    console.log('resetResults')
     setResults(({[currentLocationMethod]: value, ...results})=>{
       return results
     })
@@ -79,6 +78,13 @@ const App = () => {
             ...processState
           }
         })
+        setResults(({[currentLocationMethod]: value, ...results})=>{
+          return {
+            [currentLocationMethod]: {},
+            ...results
+          }
+        })
+        setCurrentError(errors.emptyResponse)
       }
     } catch (error) {
       if (error.message.includes('timeout')) {
@@ -96,7 +102,7 @@ const App = () => {
   }
 
   const totalReset = () => {
-    setResults('')
+    setResults({})
     setDropUrl('')
     setCurrentLocation('')
   }

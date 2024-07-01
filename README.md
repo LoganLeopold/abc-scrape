@@ -62,9 +62,9 @@ The server needs access to these, so in ./SERVER I use an .env and place the fol
 * GOOGLE_MAPS_KEY= *You'll need a Google API Key [(here's a decent start)](https://developers.google.com/maps/documentation/places/web-service/cloud-setup) to query the APIs I use in this project. You get a good amount of credits, but it does cost. That's why I have dummydata in use.*
 * NODE_ENV= 
   * *dev || prod - dev will use the dummyData and not cost you API pings*
-  * There are two dummy data points:
+  * The app takes care of all of this for you, but for the record, there are two dummy data points:
     * The Google Place for the typed city + state current location: this from Arlington because [the dummy link I use](https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html) has locations close to there (and my DC metroplex bias). 
-    * The return of the whole list of Google Places for the locations in the link provided in this README. That saves you 112 API pings in this case : ) 
+    * The return of the whole list of Google Places for the locations in the ABC link provided in this README. That saves you 112 API pings in this case : ) 
 
 
 #### Docker 
