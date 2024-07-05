@@ -53,7 +53,7 @@ const App = () => {
 
     const server = process.env.REACT_APP_ENV === 'dev' ? 'http://localhost:3001/processLocations' : '/api/processLocations' 
     console.log(server, process.env.REACT_APP_ENV)
-
+    console.log(window.location)
     try {
       const response = await axios.post(
         server,
