@@ -51,14 +51,10 @@ const App = () => {
       return 
     }
 
-    const server = process.env.REACT_APP_ENV === 'dev' ? 'http://localhost:3001/processLocations' : '/api/processLocations' 
-    console.log(server, process.env.REACT_APP_ENV)
-    console.log(window.location)
+    const server = window.location.host === "localhost:3050" || window.location.host === "www.abcassist.info" ? '/api/processLocations' : 'http://localhost:3001/processLocations'
     try {
       const response = await axios.post(
         server,
-        // '/api/processLocations', 
-        // 'http://localhost:3001/processLocations',
         payload,
         {timeout: 15000},
       );

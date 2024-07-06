@@ -41,7 +41,7 @@ const parseList = async (listUrl) => {
 
 // Fetches Google places with long/lat data from array of addresses
 const createGooglePlaces = async (addresses) => {
-  if (process.env.NODE_ENV === 'prod') {    
+  if (env === 'prod') {    
     try {
       const places = await Promise.all(addresses.map(async (add, i) => {  
         const thisPlace = await googleClient.findPlaceFromText({
@@ -66,7 +66,7 @@ const createGooglePlaces = async (addresses) => {
 
 // Used solely for fetching typed city + state
 const getCurrentLocationPlace = async (placeString) => {
-  if (process.env.NODE_ENV === "prod") {
+  if (env === "prod") {
     try {
       const currentLocation = await googleClient.findPlaceFromText({
         params: {
