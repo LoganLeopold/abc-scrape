@@ -160,12 +160,8 @@ app.post('/processLocations', async (req, res) => {
   console.log("processLocations")
   try {
     const addresses = await parseList(req.body.dropUrl)
-
-    // GoogleResults instead
     const places = await createGooglePlaces(addresses)
-    // uses getCurrentLocationPlace, which needs RichmondResults instead
     const currentLocation = await resolveCurrentLocation(req.body.currentLocation)
-
     const closePlaces = distanceFilterPlaces(places, currentLocation)
     const individualLinks = createIndividualLinks(closePlaces)
     const finalWaypoints = constructUrl(closePlaces)  
