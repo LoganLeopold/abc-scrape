@@ -6,7 +6,6 @@ const Results = (props) => {
   const {finalWaypoints, individualLinks} = results 
   const isEmpty = Object.keys(results).length > 0
 
-  console.log("RESULTS")
   useEffect(()=>{
     setTheseResults(props)
   },[props])
