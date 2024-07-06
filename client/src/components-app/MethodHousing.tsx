@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Geolocation from './Geolocation';
+import * as types from '../types'
 
 const MethodHousing = ({ setCurrentLocation, resetResults }) => {
   const [method, setMethod] = useState('')

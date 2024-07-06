@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { MouseEventHandler, useState } from 'react';
+import * as types from '../types'
 
 const Geolocation = ({ setGeolocation, resetResults }) => {
-  const [currentCoords, setCurrentCoords] = useState('')
-  const [status, setStatus] = useState('initialized')
+  const [currentCoords, setCurrentCoords] = useState<types.Coordinates>({})
+  const [status, setStatus] = useState<types.ProcessState>('initialized')
   const [fadeCoords, setFadeCoords] = useState(true)
 
   const geoLocateSuccess = (data) => {
@@ -13,15 +14,15 @@ const Geolocation = ({ setGeolocation, resetResults }) => {
     setTimeout(()=>{setFadeCoords(false)}, 1000)
   }
 
-  const geoLocateError = (error) => {
+  const geoLocateError = (error: GeolocationPositionError) => {
     resetResults()
     setStatus('error')  
     // currentCoords takes string, so should work
-    setGeolocation('')
+    setGeolocation({})
     setCurrentCoords(error.message.length > 0 ? error.message : 'The gelocation encountered an error. Try using a city-state combo for now.')
   }
 
-  const onGeoLocation = (e) => {
+  const onGeoLocation = (e: React.MouseEvent) => {
     setGeolocation('')
     resetResults()
     e.preventDefault()

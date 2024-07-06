@@ -1,16 +1,17 @@
 import { useRef, useState } from 'react';
 import axios from 'axios';
+import MethodHousing from './MethodHousing';
+import Results from './Results';
+import * as types from '../types'
 import '../css/App.css';
 import '../fonts/youre gone.otf'
 import '../fonts/youre gone it.otf'
-import MethodHousing from './MethodHousing';
-import Results from './Results';
 
-const App = () => {
-  const [dropUrl, setDropUrl] = useState('')
-  const [results, setResults] = useState({})
+export const App = () => {
+  const [dropUrl, setDropUrl] = useState<string>('')
+  const [results, setResults] = useState<types.ResultsObject>({})
   const [currentLocation, setCurrentLocation] = useState('')
-  const [processState, setProcessState] = useState({written:'initialized', geolocation:'initialized'})
+  const [processState, setProcessState] = useState<types.ProcessStateObject>({written:'initialized', geolocation:'initialized'})
   const [currentError, setCurrentError] = useState('')
   const formRef = useRef(null)
   const currentLocationMethod = Object.keys(currentLocation)[0]
@@ -170,5 +171,3 @@ const App = () => {
     </div>
   );
 }
-
-export default App;
