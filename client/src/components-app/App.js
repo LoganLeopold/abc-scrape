@@ -10,14 +10,14 @@ const App = () => {
   const [dropUrl, setDropUrl] = useState('')
   const [results, setResults] = useState({})
   const [currentLocation, setCurrentLocation] = useState('')
-  const [processState, setProcessState] = useState('initialized')
+  const [processState, setProcessState] = useState({written:'initialized', geolocation:'initialized'})
   const [currentError, setCurrentError] = useState('')
   const formRef = useRef(null)
   const currentLocationMethod = Object.keys(currentLocation)[0]
   const currentState = processState[currentLocationMethod]
   const errors = {
     timeout: "Sorry - the server is taking too long. We're experiencing an error. Eeeembarassing.",
-    emptyResponse: "There weren't any results close to the location you chose. Check on your city/geolocation."
+    emptyResponse: "There weren't any results close to the location you chose. Check on your city/geolocation. If you know there are close locations and this is in-error, please reach out!"
   }
 
   const resetResults = () => { // Resets results if underlying City changes
@@ -51,9 +51,10 @@ const App = () => {
       return 
     }
 
+    const server = window.location.host === "localhost:3050" || window.location.host === "www.abcassist.info" ? '/api/processLocations' : 'http://localhost:3001/processLocations'
     try {
       const response = await axios.post(
-        '/api/processLocations', 
+        server,
         payload,
         {timeout: 15000},
       );
@@ -77,6 +78,13 @@ const App = () => {
             ...processState
           }
         })
+        setResults(({[currentLocationMethod]: value, ...results})=>{
+          return {
+            [currentLocationMethod]: {},
+            ...results
+          }
+        })
+        setCurrentError(errors.emptyResponse)
       }
     } catch (error) {
       if (error.message.includes('timeout')) {
@@ -94,7 +102,7 @@ const App = () => {
   }
 
   const totalReset = () => {
-    setResults('')
+    setResults({})
     setDropUrl('')
     setCurrentLocation('')
   }
@@ -130,8 +138,8 @@ const App = () => {
             <h2>3. Get closest stores as waypoints.</h2>
             <button
               type="submit" 
-              className={`${Object.keys(results).length > 0 ? 'cursor-disable' : ''}`}
-              disabled={`${Object.keys(results).length > 0 ? 'disabled' : ''}`}
+              className={`${currentState !== 'initialized' ? 'cursor-disable' : ''}`}
+              disabled={`${currentState !== 'initialized' ? 'disabled' : ''}`}
               onClick={(e)=>{
                 processLocations(e); 
                 setProcessState(({[currentLocationMethod]: value, ...processState})=>{
@@ -142,7 +150,7 @@ const App = () => {
                 })
               }} 
             >
-              {`${Object.keys(results).length > 0 ? 'Results Already Retrieved' : 'Get Closest Stores'}`}
+              {`${currentState !== 'initialized' ? 'Results Already Retrieved' : 'Get Closest Stores'}`}
             </button>
           </div>
         }

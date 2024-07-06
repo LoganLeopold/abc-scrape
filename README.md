@@ -57,7 +57,21 @@ Is an application ever truly finished? I think of David Fincher's "Movies aren't
 
 ### Run It
 
-This project will run in docker from the compose with a simple "docker-compose up --build". Of course you'll need to have docker installed. You can also run "npm install" && "npm run start" in both the SERVER and client directories to get a client server on localhost:3000 and the BE running on localhost:3001. As aforementioned, you'll have to manually edit the post request URL in ./client/components-app/App.js to be 'http://localhost:3001/processLocations' to query the BE. 
+#### Env Variables
+The server needs access to these, so in ./SERVER I use an .env and place the following in there:
+* GOOGLE_MAPS_KEY= *You'll need a Google API Key [(here's a decent start)](https://developers.google.com/maps/documentation/places/web-service/cloud-setup) to query the APIs I use in this project. You get a good amount of credits, but it does cost. That's why I have dummydata in use.*
+* NODE_ENV= 
+  * *dev || prod - dev will use the dummyData and not cost you API pings*
+  * The app takes care of all of this for you, but for the record, there are two dummy data points:
+    * The Google Place for the typed city + state current location: this from Arlington because [the dummy link I use](https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html) has locations close to there (and my DC metroplex bias). 
+    * The return of the whole list of Google Places for the locations in the ABC link provided in this README. That saves you 112 API pings in this case : ) 
+
+
+#### Docker 
+This project will run in docker from the docker-compose with a simple "docker-compose up --build". Of course you'll need to have [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/linux/) installed. 
+
+#### Completely Local
+You can also run "npm install" && "npm run start" in both the SERVER and client directories to get a client server on localhost:3000 and the BE running on localhost:3001. **Important** - see environment details below. 
 
 
 

@@ -4,11 +4,12 @@ const axios = require('axios');
 const jsdom = require("jsdom");
 const {Client: GoogleClient} = require("@googlemaps/google-maps-services-js");
 var Distance = require('geo-distance');
-const dummyData = require('./dummydata.json');
+const { GoogleResults, ArlingtonResult } = require('./dummydata');
 
 const googleClient = new GoogleClient({})
 const { JSDOM } = jsdom;
 const app = express();
+const env = process.env.NODE_ENV
 const port = 3001;
 
 app.use(express.json())
@@ -40,38 +41,47 @@ const parseList = async (listUrl) => {
 
 // Fetches Google places with long/lat data from array of addresses
 const createGooglePlaces = async (addresses) => {
-  try {
-    const places = await Promise.all(addresses.map(async (add, i) => {  
-      const thisPlace = await googleClient.findPlaceFromText({
-        params: {
-          key: process.env.GOOGLE_MAPS_KEY,
-          input: `${add} Virginia ABC`,
-          inputtype: "textquery",
-          fields: ['geometry', 'place_id', 'formatted_address']
-        }
-      })
-      return thisPlace.data
-    }))        
-    return places
-  } catch (error) {
-    return error 
+  if (env === 'prod') {    
+    try {
+      const places = await Promise.all(addresses.map(async (add, i) => {  
+        const thisPlace = await googleClient.findPlaceFromText({
+          params: {
+            key: process.env.GOOGLE_MAPS_KEY,
+            input: `${add} Virginia ABC`,
+            inputtype: "textquery",
+            fields: ['geometry', 'place_id', 'formatted_address']
+          }
+        })
+        return thisPlace.data
+      }))        
+      return places
+    } catch (error) {
+      return error 
+    }
+  } else {
+    console.log("These are dummy results because you're in local - test the API itself before prod") // Leave this here just in case
+    return GoogleResults
   }
 }
 
 // Used solely for fetching typed city + state
 const getCurrentLocationPlace = async (placeString) => {
-  try {
-    const currentLocation = await googleClient.findPlaceFromText({
-      params: {
-        key: process.env.GOOGLE_MAPS_KEY,
-        input: placeString,
-        inputtype: "textquery",
-        fields: ['geometry', 'place_id']
-      }
-    })
-    return currentLocation.data
-  } catch (error) {
-    return error
+  if (env === "prod") {
+    try {
+      const currentLocation = await googleClient.findPlaceFromText({
+        params: {
+          key: process.env.GOOGLE_MAPS_KEY,
+          input: placeString,
+          inputtype: "textquery",
+          fields: ['geometry', 'place_id']
+        }
+      })
+      return currentLocation.data
+    } catch (error) {
+      return error
+    }
+  } else {
+    return ArlingtonResult
   }
 }
 
