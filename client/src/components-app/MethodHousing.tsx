@@ -55,14 +55,12 @@ const MethodHousing: React.FC<PropsWithChildren<Props>> = ({ setCurrentLocation,
       </div>
       
       { usedMethods['written'] > 0 &&
-      // ${ usedMethods['written'] <= 2 ? 'fadeIn' : ''}
         <div className={`method ${method === 'written' ? 'active' : ''}`}>
           <input className="city-input" value={typed} type="text" name="current_location" placeholder='City, State' onChange={typedChange} disabled={method !== 'written'} required={method === 'written'}/>
         </div>
       }
       
       { usedMethods['geolocation'] > 0 &&
-      // ${ usedMethods['geolocation'] <= 2 ? 'fadeIn' : ''}
         <div className={`method ${method === 'geolocation' ? 'active' : ''}`}>
           <Geolocation 
             setGeolocation={setGeolocation}
