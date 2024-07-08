@@ -1,11 +1,9 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import MethodHousing from './MethodHousing';
 import Results from './Results';
 import {ResultsObject, CurrentLocation, ProcessStateObject} from '../types';
 import '../css/App.css';
-import '../fonts/youre gone.otf';
-import '../fonts/youre gone it.otf';
 
 const App = () => {
   const [dropUrl, setDropUrl] = useState<string>('')
@@ -36,6 +34,8 @@ const App = () => {
   const onUrlInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDropUrl(e.target.value)
   }
+
+  useEffect(() => { console.log(dropUrl) }, [dropUrl])
 
   const processLocations = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -126,7 +126,7 @@ const App = () => {
       <form id="link_submit" ref={formRef}>
         <div className='input_group'>
           <h2>1. Place the latest drop url.</h2>
-          <input className="form_input" type="text" name="drop_url" placeholder='Drop Url Goes Here' onChange={onUrlInputChange} required value={dropUrl}/>
+          <input className="form_input" type="text" name="drop_url" placeholder='' onChange={onUrlInputChange} required value={dropUrl}/>
         </div>
 
         {dropUrl &&

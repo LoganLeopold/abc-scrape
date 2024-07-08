@@ -3,26 +3,26 @@
   --color-primary-blue: #0063a4;
 }
 @font-face {
-  font-family: "Alfarn", sans-serif;
-  src: url("../fonts/Alfarn.otf") format("opentype");
+  font-family: "library";
+  src: local("Library 3 am"), url("../fonts/Library\ 3\ am.otf") format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-  font-family: "gone";
-  src: local("youre gone"), url("../fonts/youre\ gone.otf") format('opentype');
+  font-family: "Montserrat";
+  src: local("Monterrat-Bold"), url('../fonts/Montserrat-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Epilogue";
+  src: local("Epilogue"), url('../fonts/Epilogue-Bold.otf') format('opentype');
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
-  font-family: "gone";
-  src: local("youre gone it"), url("../fonts/youre\ gone it.otf") format('opentype');
-  font-weight: bold;
-  font-style: italic;
-}
-@font-face {
-  font-family: "library";
-  src: local("Library 3 am"), url("../fonts/Library\ 3\ am.otf") format('opentype');
+  font-family: "Epilogue";
+  src: local('Epilogue'), url('../fonts/Epilogue-Regular.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
@@ -34,6 +34,10 @@
   display: flex;
   flex-direction: column;
   margin: 20px auto 0 auto;
+  /* font-family: "Montserrat"; */
+}
+body {
+  font-family: 'Epilogue';
 }
 @media screen and (min-width: 568px) {
   .App {
@@ -92,23 +96,30 @@ button.reset:hover, button.reset:active {
 .fadeIn {
   animation: fadeIn 0.5s linear;
 }
+.form_input:empty {
+  border: none;
+  border-bottom: 2px solid var(--color-primary-blue);
+}
 .form_input {
-  width: calc(100% - 20px);
+  width: calc(100% - 8px);
   border: none;
   margin-top: 10px;
-  padding: 10px 10px 10px 6px;
-  font-size: 16px;
+  padding: 10px 2px 10px 3px;
   background-color: white;
-  border-radius: 6px;
   outline: none;
-  color: var(--color-primary-blue);
+  /* border-radius: 6px; */
   border: 2px solid var(--color-primary-blue);
+  font-size: 16px;
+  color: var(--color-primary-blue);
+  font-family: "Epilogue";
+  font-weight: normal;
 }
 .form_input::placeholder {
   color: var(--color-primary-blue);
+  font-size: 14 px;
   font-style: italic;
   font-weight: bold;
-  opacity: 0.8;
+  opacity: 0.5;
 }
 .form_input:focus::placeholder {
   opacity: 0;
@@ -150,12 +161,20 @@ h1 {
   color: var(--color-primary-blue);
   font-weight: bold;
   font-family: 'library';
+  font-size: 40px;
+  margin-top: 0;
+  margin-bottom: 40px;
 }
 h2 {
   margin: 0;
-  font-size: 20px;
+  margin-top: 20px;
   color: var(--color-primary-blue);
   text-align: left;
+  font-family: "Epilogue";
+  font-weight: bold;
+  font-size: 20px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 input.form_input:auto-fill, input.form_input:-webkit-autofill, input.form_input:-webkit-autofill:focus {
   font-size: 17px !important;
