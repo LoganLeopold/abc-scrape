@@ -41,12 +41,12 @@ const Results: React.FC<PropsWithChildren<Props>> = (props: Props) => {
           Circuit Link
         </button>
       </div>
-      <p className={`${selected === 'waypoints' ? 'active' : ''}`}>This creates a link that routes you to up to 10 closest locations as a circuit. You may need to rearrange the order for an optimal route. </p>
       <div className={`result-option ${selected === 'waypoints' ? 'active' : ''}`}>
-        <a href={finalWaypoints} target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
+        <p>This creates a link that routes you to up to 10 closest locations as a circuit. You may need to rearrange the order for an optimal route. </p>
+        <a href={finalWaypoints} className='waypoints' target='_blank' rel="noreferrer">{'Open In Maps >'}</a>
       </div>
-      <p className={`${selected === 'list' ? 'active' : ''}`}>A list of up to the top 10 closest locations.</p>
       <div className={`result-option ${selected === 'list' ? 'active' : ''}`}>
+        <p>A list of up to the top 10 closest locations.</p>
         <div className='links'>
           { 
             individualLinks.length > 0 && individualLinks.map( link => 

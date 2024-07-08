@@ -34,7 +34,6 @@
   display: flex;
   flex-direction: column;
   margin: 20px auto 0 auto;
-  /* font-family: "Montserrat"; */
 }
 body {
   font-family: 'Epilogue';
@@ -54,15 +53,15 @@ a:hover {
 button, input[type="submit"], a {
   display: block;
   width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  font-size: 16px;
-  font-weight: bold;
+  padding: 12px 10px 10px 10px;
   border-radius: 6px;
   cursor: pointer;
   border: 2px solid var(--color-primary-blue);
-  color: var(--color-primary-blue);
   background-color: white;
+  font-family: 'Epilogue';
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--color-primary-blue);
 }
 button.active, input[type="submit"].active, a.active, button:hover, input[type="submit"]:hover, a:hover {
   background-color: var(--color-primary-blue);
@@ -96,35 +95,43 @@ button.reset:hover, button.reset:active {
 .fadeIn {
   animation: fadeIn 0.5s linear;
 }
-.form_input:empty {
+.city-input {
+  width: auto;
+  padding: 10px 2px 10px 10px;
+  background-color: white;
+  outline: none;
+  font-size: 16px;
+  font-family: "Epilogue";
+  font-weight: normal;
+  color: var(--color-primary-blue);
   border: none;
-  border-bottom: 2px solid var(--color-primary-blue);
 }
-.form_input {
+.drop-url {
   width: calc(100% - 8px);
-  border: none;
-  margin-top: 10px;
+  margin-top: 5px;
   padding: 10px 2px 10px 3px;
   background-color: white;
   outline: none;
-  /* border-radius: 6px; */
-  border: 2px solid var(--color-primary-blue);
   font-size: 16px;
-  color: var(--color-primary-blue);
   font-family: "Epilogue";
   font-weight: normal;
+  color: var(--color-primary-blue);
+  border: none;
+  border-bottom: 2px solid var(--color-primary-blue);
 }
-.form_input::placeholder {
+.drop-url::placeholder, .city-input::placeholder {
   color: var(--color-primary-blue);
   font-size: 14 px;
   font-style: italic;
   font-weight: bold;
   opacity: 0.5;
+  padding-top: 3px;
+  padding-left: 10px;
 }
-.form_input:focus::placeholder {
+.city-input:focus::placeholder, .drop-url:focus::placeholder {
   opacity: 0;
 }
-.form_input:-webkit-autofill, .form_input:-webkit-autofill:hover, .form_input:-webkit-autofill:focus, .form_input:-internal-autofill-selected {
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-internal-autofill-selected {
   color: white !important;
   background-color: var(--color-primary-blue) !important;
   -webkit-transition-delay: 99999s;
@@ -140,10 +147,8 @@ button.reset:hover, button.reset:active {
 .geolocations div {
   display: flex;
   justify-content: space-evenly;
-  margin: 20px 0 10px 0;
   border: 2px solid var(--color-primary-blue);
-  padding: 10px;
-  border-radius: 20px;
+  background: var(--color-primary-blue);
 }
 .geolocations div p {
   text-align: left;
@@ -153,9 +158,16 @@ button.reset:hover, button.reset:active {
   margin-bottom: 0px;
   word-wrap: anywhere;
   color: var(--color-primary-blue);
+  background: white;
+  border-radius: 6px;
+  padding: 10px;
 }
 .geolocations div p:first-of-type {
   margin-right: 5px;
+}
+.geolocations-status {
+  color: white;
+  width: 100%;
 }
 h1 {
   color: var(--color-primary-blue);
@@ -176,12 +188,7 @@ h2 {
   letter-spacing: 1.5px;
   text-transform: uppercase;
 }
-input.form_input:auto-fill, input.form_input:-webkit-autofill, input.form_input:-webkit-autofill:focus {
-  font-size: 17px !important;
-  background-color: var(--color-primary-blue) !important;
-  color: white !important;
-}
-.input_group {
+.input_group, .results {
   width: 100%;
   position: relative;
   display: flex;
@@ -198,28 +205,30 @@ input[type="submit"]:hover {
 .button--select {
   display: flex;
   justify-content: space-between;
+  margin-top: 17px;
+  column-gap: 10px;
+  margin-bottom: -1px;
 }
 .button--select button {
-  width: 45%;
-  font-size: 14px;
+  padding: 12px 10px 10px 10px;
+  border-radius: 6px 6px 0px 0px;
+  border-bottom: none;
+}
+button[type="submit"] {
+  margin-top: 15px;
 }
 .method {
   display: none;
   position: relative;
 }
 .method.active {
-  display: block;
+  display: flex;
 }
-.method.active {
-  display: block;
-}
-.results > p {
-  display: none;
-  font-size: 14px;
-  margin: 20px 0 25px 0;
-}
-.results > p.active {
-  display: block;
+.method-housing .method {
+  background: var(--color-primary-blue);
+  padding: 15px;
+  border-radius: 0px 0px 6px 6px;
+  flex-direction: column;
 }
 .results .links .individual-link {
   display: flex;
@@ -228,6 +237,7 @@ input[type="submit"]:hover {
   padding: 10px 20px;
   margin: 10px 0;
   text-align: left;
+  background: white;
 }
 .results .links .individual-link a {
   width: 35%;
@@ -238,13 +248,26 @@ input[type="submit"]:hover {
 .results .links .individual-link p {
   width: 65%;
   font-size: 14px;
+  color: var(--color-primary-blue);
+  font-family: "Epilogue";
+  font-weight: bold;
+  font-style: normal;
 }
 .results .result-option {
+  position: relative;
   display: none;
   flex-direction: column;
+  padding: 0 15px;
+  background: var(--color-primary-blue);
 }
 .results .result-option.active {
   display: flex;
+}
+.results .result-option > p {
+  margin-top: 25px;
+  font-size: 14px;
+  color: white;
+  background: var(--color-primary-blue);
 }
 .submissions a {
   width: auto;
@@ -255,6 +278,10 @@ input[type="submit"]:hover {
 }
 .title_animate:hover {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+.waypoints {
+  margin: 10px 0 20px 0;
+  width: auto;
 }
 /* Keyframes */
 @keyframes fadeIn {
