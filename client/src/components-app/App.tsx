@@ -1,30 +1,31 @@
 import { useRef, useState } from 'react';
 import axios from 'axios';
-import '../css/App.css';
-import '../fonts/youre gone.otf'
-import '../fonts/youre gone it.otf'
 import MethodHousing from './MethodHousing';
 import Results from './Results';
+import {ResultsObject, CurrentLocation, ProcessStateObject} from '../types';
+import '../css/App.css';
+import '../fonts/youre gone.otf';
+import '../fonts/youre gone it.otf';
 
 const App = () => {
-  const [dropUrl, setDropUrl] = useState('')
-  const [results, setResults] = useState({})
-  const [currentLocation, setCurrentLocation] = useState('')
-  const [processState, setProcessState] = useState({written:'initialized', geolocation:'initialized'})
+  const [dropUrl, setDropUrl] = useState<string>('')
+  const [results, setResults] = useState<ResultsObject>({})
+  const [currentLocation, setCurrentLocation] = useState<CurrentLocation>({})
+  const [processState, setProcessState] = useState<ProcessStateObject>({written:'initialized', geolocation:'initialized'})
   const [currentError, setCurrentError] = useState('')
-  const formRef = useRef(null)
+  const formRef = useRef<HTMLFormElement>(null)
   const currentLocationMethod = Object.keys(currentLocation)[0]
-  const currentState = processState[currentLocationMethod]
+  const currentState = processState[currentLocationMethod as keyof ProcessStateObject]
   const errors = {
     timeout: "Sorry - the server is taking too long. We're experiencing an error. Eeeembarassing.",
     emptyResponse: "There weren't any results close to the location you chose. Check on your city/geolocation. If you know there are close locations and this is in-error, please reach out!"
   }
 
   const resetResults = () => { // Resets results if underlying City changes
-    setResults(({[currentLocationMethod]: value, ...results})=>{
+    setResults(({[currentLocationMethod as keyof ResultsObject]: value, ...results})=>{
       return results
     })
-    setProcessState(({[currentLocationMethod]: value, ...processLocations})=>{
+    setProcessState(({[currentLocationMethod as keyof ResultsObject]: value, ...processLocations})=>{
       return {
         [currentLocationMethod]: 'initialized',
         ...processLocations
@@ -32,18 +33,21 @@ const App = () => {
     })
   }
 
-  const onUrlInputChange = (e) => {
+  const onUrlInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDropUrl(e.target.value)
   }
 
-  const processLocations = async (e) => {
+  const processLocations = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("processLocations")
     e.preventDefault()
-    formRef.current.reportValidity()
-    if (!formRef.current.checkValidity()) { 
-      return 
+    if (formRef.current) {
+      formRef.current.reportValidity()
+      if (!formRef.current.checkValidity()) { 
+        return 
+      }
     }
     
-    let payload = { dropUrl }
+    let payload = { dropUrl, currentLocation: '' }
     if (currentLocation) {
       // is either returning a typed city + state OR json-stringified coordinates
       payload['currentLocation'] = Object.values(currentLocation)[0]
@@ -59,26 +63,26 @@ const App = () => {
         {timeout: 15000},
       );
       if (Object.keys(response.data).length !== 0) {
-        setProcessState(({[currentLocationMethod]: value, ...processState})=>{
+        setProcessState(({[currentLocationMethod as keyof ProcessStateObject]: value, ...processState})=>{
           return {
             [currentLocationMethod]: 'success',
             ...processState
           }
         })
-        setResults(({[currentLocationMethod]: value, ...results})=>{
+        setResults(({[currentLocationMethod as keyof ResultsObject]: value, ...results})=>{
           return {
             [currentLocationMethod]: response.data,
             ...results
           }
         })
       } else {
-        setProcessState(({[currentLocationMethod]: value, ...processState})=>{
+        setProcessState(({[currentLocationMethod as keyof ProcessStateObject]: value, ...processState})=>{
           return {
             [currentLocationMethod]: 'error',
             ...processState
           }
         })
-        setResults(({[currentLocationMethod]: value, ...results})=>{
+        setResults(({[currentLocationMethod as keyof ResultsObject]: value, ...results})=>{
           return {
             [currentLocationMethod]: {},
             ...results
@@ -86,13 +90,13 @@ const App = () => {
         })
         setCurrentError(errors.emptyResponse)
       }
-    } catch (error) {
+    } catch (error: any) {
       if (error.message.includes('timeout')) {
         setCurrentError(errors.timeout)
       } else {
         setCurrentError(errors.emptyResponse)
       }
-      setProcessState(({[currentLocationMethod]: value, ...processState})=>{
+      setProcessState(({[currentLocationMethod as keyof ProcessStateObject]: value, ...processState})=>{
         return {
           [currentLocationMethod]: 'error',
           ...processState
@@ -123,7 +127,7 @@ const App = () => {
       <form id="link_submit" ref={formRef}>
         <div className='input_group'>
           <h2>1. Place the latest drop url.</h2>
-          <input className="form_input" type="text" name="drop_url" placeholder='Drop Url Goes Here' onChange={onUrlInputChange} htmlFor="link_submit" required value={dropUrl}/>
+          <input className="form_input" type="text" name="drop_url" placeholder='Drop Url Goes Here' onChange={onUrlInputChange} required value={dropUrl}/>
         </div>
 
         {dropUrl &&
@@ -133,16 +137,16 @@ const App = () => {
           />
         }
 
-        { dropUrl && currentLocation[currentLocationMethod] && currentState !== 'error' &&
+        { dropUrl && currentLocation[currentLocationMethod as keyof ProcessStateObject] && currentState !== 'error' &&
           <div className={`input_group fadeIn`}>
             <h2>3. Get closest stores as waypoints.</h2>
             <button
               type="submit" 
               className={`${currentState !== 'initialized' ? 'cursor-disable' : ''}`}
-              disabled={`${currentState !== 'initialized' ? 'disabled' : ''}`}
+              disabled={currentState !== 'initialized' ? true : false}
               onClick={(e)=>{
                 processLocations(e); 
-                setProcessState(({[currentLocationMethod]: value, ...processState})=>{
+                setProcessState(({[currentLocationMethod as keyof ProcessStateObject]: value, ...processState})=>{
                   return {
                     [currentLocationMethod]: 'fetching',
                     ...processState
@@ -156,7 +160,7 @@ const App = () => {
         }
         { 
           dropUrl && Object.keys(results).includes(currentLocationMethod) && currentState === 'success' &&
-            <Results totalReset={totalReset} results={results[currentLocationMethod]}/>
+            <Results totalReset={totalReset} results={results[currentLocationMethod as keyof ResultsObject]}/>
         }
         {
           currentState === 'fetching' && 

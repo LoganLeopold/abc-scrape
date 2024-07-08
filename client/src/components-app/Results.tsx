@@ -1,7 +1,13 @@
-import { useEffect, useState } from 'react'
+import { PropsWithChildren, useEffect, useState } from 'react';
+import {MethodResults, ResultsStatus} from '../types';
 
-const Results = (props) => {
-  const [theseResults, setTheseResults] = useState(props)
+interface Props {
+  results: MethodResults;
+  totalReset: () => void;
+}
+
+const Results: React.FC<PropsWithChildren<Props>> = (props: Props) => {
+  const [theseResults, setTheseResults] = useState<Props>(props)
   const {results, totalReset} = theseResults
   const {finalWaypoints, individualLinks} = results 
   const isEmpty = Object.keys(results).length > 0
@@ -10,10 +16,10 @@ const Results = (props) => {
     setTheseResults(props)
   },[props])
 
-  const [selected, setSelected] = useState('list')
+  const [selected, setSelected] = useState<ResultsStatus>('list')
 
   return (
-    <div class={`results ${isEmpty ? '' : 'active'}`}>
+    <div className={`results ${isEmpty ? '' : 'active'}`}>
       <h2>4. Get there!</h2>
       <div className='button--select fadeIn'>
         <button 
@@ -44,7 +50,7 @@ const Results = (props) => {
         <div className='links'>
           { 
             individualLinks.length > 0 && individualLinks.map( link => 
-              <div class='individual-link'>
+              <div className='individual-link'>
                 <p>{link.address}</p>
                 <a href={link.link} target='_blank'>Open in Google</a>
               </div>

@@ -1,13 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, PropsWithChildren, Dispatch, SetStateAction } from 'react';
 import Geolocation from './Geolocation';
+import * as types from '../types'
+import {CurrentLocation, SearchMethod, Coordinates} from '../types'
 
-const MethodHousing = ({ setCurrentLocation, resetResults }) => {
-  const [method, setMethod] = useState('')
-  const [typed, setTyped] = useState('')
+interface Props {
+  setCurrentLocation: Dispatch<SetStateAction<CurrentLocation>>
+  resetResults: () => void
+}
+
+const MethodHousing: React.FC<PropsWithChildren<Props>> = ({ setCurrentLocation, resetResults }) => {
+  const [method, setMethod] = useState<SearchMethod>('geolocation')
+  const [typed, setTyped] = useState<string>()
   const [geolocated, setGeolocation] = useState('')
-  const [usedMethods, setUsedMethods] = useState({'written': 0, 'geolocation': 0}) // just for one-time fadeIn purposes
+  const [usedMethods, setUsedMethods] = useState<{
+    [k in types.SearchMethod]: number
+  }>({'written': 0, 'geolocation': 0}) // just for one-time fadeIn purposes
 
-  const typedChange = (e) => {
+  const typedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTyped(e.target.value)
     resetResults()
   }
@@ -47,7 +56,7 @@ const MethodHousing = ({ setCurrentLocation, resetResults }) => {
       
       { usedMethods['written'] > 0 &&
         <div className={`method ${method === 'written' ? 'active' : ''} ${ usedMethods['written'] <= 2 ? 'fadeIn' : ''}`}>
-          <input className="form_input" value={typed} type="text" name="current_location" placeholder='City, State' onChange={typedChange} htmlFor="link_submit" disabled={method !== 'written'} required={method === 'written'}/>
+          <input className="form_input" value={typed} type="text" name="current_location" placeholder='City, State' onChange={typedChange} disabled={method !== 'written'} required={method === 'written'}/>
         </div>
       }
       
