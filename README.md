@@ -61,19 +61,17 @@ Is an application ever truly finished? I think of David Fincher's "Movies aren't
 The server needs access to these, so in ./SERVER I use an .env and place the following in there:
 * GOOGLE_MAPS_KEY= *You'll need a Google API Key [(here's a decent start)](https://developers.google.com/maps/documentation/places/web-service/cloud-setup) to query the APIs I use in this project. You get a good amount of credits, but it does cost. That's why I have dummydata in use.*
 * NODE_ENV= 
-  * *dev || prod - dev will use the dummyData and not cost you API pings*
+  * dev || prod - dev will use the dummyData and not cost you API pings
   * The app takes care of all of this for you, but for the record, there are two dummy data points:
     * The Google Place for the typed city + state current location: this from Arlington because [the dummy link I use](https://www.abc.virginia.gov/limited/allocated_stores_02_06_2023_02_30_pmlhHUeqm1xIf7QPX8FDXhde8V.html) has locations close to there (and my DC metroplex bias). 
     * The return of the whole list of Google Places for the locations in the ABC link provided in this README. That saves you 112 API pings in this case : ) 
 
+#### Client Environment
+The client does not make use of environment variables, but it does make use of window.location.host. In ./client/src/components-app/App.tsx, we check the host and use the appropriate api endpoint for the various environments. The two docker scenarios (actual production on abcassist.info and a local Docker container running on port 3050) use the endpoint established by nginx. The full localhost URL represents if you run both SERVER and client separately on your comp. 
 
 #### Docker 
 This project will run in docker from the docker-compose with a simple "docker-compose up --build". Of course you'll need to have [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/linux/) installed. 
 
 #### Completely Local
 You can also run "npm install" && "npm run start" in both the SERVER and client directories to get a client server on localhost:3000 and the BE running on localhost:3001. **Important** - see environment details below. 
-
-
-
-
 
