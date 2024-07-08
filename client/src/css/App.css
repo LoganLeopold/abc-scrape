@@ -259,6 +259,7 @@ button[type="submit"] {
   flex-direction: column;
   padding: 0 15px 15px 15px;
   background: var(--color-primary-blue);
+  border-radius: 0 0 6px 6px;
 }
 .results .result-option.active {
   display: flex;
