@@ -38,6 +38,7 @@ const App = () => {
   }
 
   const processLocations = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("processLocations")
     e.preventDefault()
     if (formRef.current) {
       formRef.current.reportValidity()
@@ -142,7 +143,7 @@ const App = () => {
             <button
               type="submit" 
               className={`${currentState !== 'initialized' ? 'cursor-disable' : ''}`}
-              disabled={currentState !== 'initialized' ? false : true}
+              disabled={currentState !== 'initialized' ? true : false}
               onClick={(e)=>{
                 processLocations(e); 
                 setProcessState(({[currentLocationMethod as keyof ProcessStateObject]: value, ...processState})=>{
