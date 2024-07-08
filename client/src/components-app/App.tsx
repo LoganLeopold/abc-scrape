@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import axios from 'axios';
 import MethodHousing from './MethodHousing';
 import Results from './Results';
@@ -34,8 +34,6 @@ const App = () => {
   const onUrlInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDropUrl(e.target.value)
   }
-
-  useEffect(() => { console.log(dropUrl) }, [dropUrl])
 
   const processLocations = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()

@@ -19,9 +19,9 @@ const Results: React.FC<PropsWithChildren<Props>> = (props: Props) => {
   const [selected, setSelected] = useState<ResultsStatus>('list')
 
   return (
-    <div className={`results ${isEmpty ? '' : 'active'}`}>
+    <div className={`results ${isEmpty ? '' : 'active'} fadeIn`}>
       <h2>4. Get there!</h2>
-      <div className='button--select fadeIn'>
+      <div className='button--select'>
         <button 
           className={`${selected === 'list' ? 'active' : ''}`}
           onClick={(e) => {
