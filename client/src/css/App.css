@@ -100,7 +100,7 @@ button.reset:hover, button.reset:active {
   padding: 10px 2px 10px 10px;
   background-color: white;
   outline: none;
-  font-size: 16px;
+  font-size: 14px;
   font-family: "Epilogue";
   font-weight: normal;
   color: var(--color-primary-blue);
@@ -112,7 +112,7 @@ button.reset:hover, button.reset:active {
   padding: 10px 2px 10px 3px;
   background-color: white;
   outline: none;
-  font-size: 16px;
+  font-size: 14px;
   font-family: "Epilogue";
   font-weight: normal;
   color: var(--color-primary-blue);
@@ -121,12 +121,12 @@ button.reset:hover, button.reset:active {
 }
 .drop-url::placeholder, .city-input::placeholder {
   color: var(--color-primary-blue);
-  font-size: 14 px;
+  font-size: 14px;
   font-style: italic;
   font-weight: bold;
   opacity: 0.5;
   padding-top: 3px;
-  padding-left: 10px;
+  padding-left: 5px;
 }
 .city-input:focus::placeholder, .drop-url:focus::placeholder {
   opacity: 0;
