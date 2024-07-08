@@ -38,7 +38,7 @@ const Geolocation: React.FC<Props> = ({ setGeolocation, resetResults }) => {
   return (
     <>
       {status === 'initialized' && 
-        <button type="submit" value="Fetch Location >" onClick={onGeoLocation}>Fetch Location</button>
+        <button type="submit" onClick={onGeoLocation}>Fetch Location</button>
       }
       {status === 'success' && 
         <div className={`geolocations ${fadeCoords ? 'fadeIn' : ''}`}>
@@ -50,11 +50,11 @@ const Geolocation: React.FC<Props> = ({ setGeolocation, resetResults }) => {
         </div>
       }
       {status === 'fetching' &&
-        <p>Fetching the location...</p>
+        <p className='geolocations-status'>Fetching the location...</p>
       }
       {status === 'error' &&
       <>
-        <p>{currentError}</p>
+        <p className='geolocations-status'>{currentError}</p>
         <button onClick={onGeoLocation}>Try Fetch Again</button>
       </>
       }

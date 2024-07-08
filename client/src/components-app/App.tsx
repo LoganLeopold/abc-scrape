@@ -4,8 +4,6 @@ import MethodHousing from './MethodHousing';
 import Results from './Results';
 import {ResultsObject, CurrentLocation, ProcessStateObject} from '../types';
 import '../css/App.css';
-import '../fonts/youre gone.otf';
-import '../fonts/youre gone it.otf';
 
 const App = () => {
   const [dropUrl, setDropUrl] = useState<string>('')
@@ -126,7 +124,7 @@ const App = () => {
       <form id="link_submit" ref={formRef}>
         <div className='input_group'>
           <h2>1. Place the latest drop url.</h2>
-          <input className="form_input" type="text" name="drop_url" placeholder='Drop Url Goes Here' onChange={onUrlInputChange} required value={dropUrl}/>
+          <input className="drop-url" type="text" name="drop_url" placeholder='' onChange={onUrlInputChange} required value={dropUrl}/>
         </div>
 
         {dropUrl &&
@@ -138,7 +136,7 @@ const App = () => {
 
         { dropUrl && currentLocation[currentLocationMethod as keyof ProcessStateObject] && currentState !== 'error' &&
           <div className={`input_group fadeIn`}>
-            <h2>3. Get closest stores as waypoints.</h2>
+            <h2>3. Get closest stores.</h2>
             <button
               type="submit" 
               className={`${currentState !== 'initialized' ? 'cursor-disable' : ''}`}

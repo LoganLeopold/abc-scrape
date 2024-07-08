@@ -30,10 +30,10 @@ const MethodHousing: React.FC<PropsWithChildren<Props>> = ({ setCurrentLocation,
   },[method, geolocated, typed])
   
   return (
-    <div className='input_group'>
+    <div className='input_group method-housing fadeIn'>
       <h2>2. Choose search method.</h2>
 
-      <div className='button--select fadeIn'>
+      <div className='button--select'>
         <button 
           className={`${method === 'written' ? 'active' : ''}`}
           onClick={(e) => {
@@ -55,20 +55,19 @@ const MethodHousing: React.FC<PropsWithChildren<Props>> = ({ setCurrentLocation,
       </div>
       
       { usedMethods['written'] > 0 &&
-        <div className={`method ${method === 'written' ? 'active' : ''} ${ usedMethods['written'] <= 2 ? 'fadeIn' : ''}`}>
-          <input className="form_input" value={typed} type="text" name="current_location" placeholder='City, State' onChange={typedChange} disabled={method !== 'written'} required={method === 'written'}/>
+        <div className={`method ${method === 'written' ? 'active' : ''}`}>
+          <input className="city-input" value={typed} type="text" name="current_location" placeholder='City, State' onChange={typedChange} disabled={method !== 'written'} required={method === 'written'}/>
         </div>
       }
       
       { usedMethods['geolocation'] > 0 &&
-        <div className={`method ${method === 'geolocation' ? 'active' : ''} ${ usedMethods['geolocation'] <= 2 ? 'fadeIn' : ''}`}>
+        <div className={`method ${method === 'geolocation' ? 'active' : ''}`}>
           <Geolocation 
             setGeolocation={setGeolocation}
             resetResults={resetResults}
           />
         </div>
       }
-
     </div>
   )
 }
