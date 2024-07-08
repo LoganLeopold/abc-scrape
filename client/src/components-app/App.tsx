@@ -38,7 +38,6 @@ const App = () => {
   }
 
   const processLocations = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("processLocations")
     e.preventDefault()
     if (formRef.current) {
       formRef.current.reportValidity()
