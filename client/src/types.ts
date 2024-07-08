@@ -1,12 +1,12 @@
 export type ProcessState = "initialized" | "error" | "fetching" | "success"
-export type SearcMethod = "written" | "geolocation"
+export type SearchMethod = "written" | "geolocation"
 
 export type ProcessStateObject = {
-  [k in SearcMethod]: ProcessState
-}
+  [k in SearchMethod]: ProcessState
+} | {}
 
 export type ResultsObject = {
-  [k in SearcMethod]: MethodResults
+  [k in SearchMethod]: MethodResults
 } | {}
 
 export type MethodResults = {
@@ -20,6 +20,12 @@ export type IndividualLink = {
 }
 
 export type Coordinates = {
-  lat: number,
-  lon: number
+  lat: number;
+  lon: number;
+}
+
+export type CurrentLocation = {
+  [k in SearchMethod]: string
 } | {}
+
+export type ResultsStatus = 'list' | 'waypoints'

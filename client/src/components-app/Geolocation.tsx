@@ -1,12 +1,18 @@
-import { MouseEventHandler, useState } from 'react';
-import * as types from '../types'
+import { Dispatch, SetStateAction, useState } from 'react';
+import {Coordinates, ProcessState} from '../types';
 
-const Geolocation = ({ setGeolocation, resetResults }) => {
-  const [currentCoords, setCurrentCoords] = useState<types.Coordinates>({})
-  const [status, setStatus] = useState<types.ProcessState>('initialized')
+interface Props {
+  setGeolocation: Dispatch<SetStateAction<string>>;
+  resetResults: () => void;
+}
+
+const Geolocation: React.FC<Props> = ({ setGeolocation, resetResults }) => {
+  const [currentCoords, setCurrentCoords] = useState<Coordinates>({lat: 0, lon: 0})
+  const [status, setStatus] = useState<ProcessState>('initialized')
+  const [currentError, setCurrentError] = useState<string>('')
   const [fadeCoords, setFadeCoords] = useState(true)
 
-  const geoLocateSuccess = (data) => {
+  const geoLocateSuccess = (data: GeolocationPosition) => {
     setStatus('success')
     const { latitude, longitude } = data.coords
     setCurrentCoords({lat: latitude, lon: longitude})
@@ -17,9 +23,8 @@ const Geolocation = ({ setGeolocation, resetResults }) => {
   const geoLocateError = (error: GeolocationPositionError) => {
     resetResults()
     setStatus('error')  
-    // currentCoords takes string, so should work
-    setGeolocation({})
-    setCurrentCoords(error.message.length > 0 ? error.message : 'The gelocation encountered an error. Try using a city-state combo for now.')
+    setGeolocation('')
+    setCurrentError(error.message.length > 0 ? error.message : 'The gelocation encountered an error. Try using a city-state combo for now.')
   }
 
   const onGeoLocation = (e: React.MouseEvent) => {
@@ -33,13 +38,13 @@ const Geolocation = ({ setGeolocation, resetResults }) => {
   return (
     <>
       {status === 'initialized' && 
-        <button type="submit" value="Fetch Location >" onClick={onGeoLocation} htmlFor="location_fetch">Fetch Location</button>
+        <button type="submit" value="Fetch Location >" onClick={onGeoLocation}>Fetch Location</button>
       }
       {status === 'success' && 
         <div className={`geolocations ${fadeCoords ? 'fadeIn' : ''}`}>
           <div>
-            <p><span>Latitude:</span><span>  {currentCoords.lat}</span></p>
-            <p><span>Longitude:</span><span>  {currentCoords.lon}</span></p>
+            <p><span>Latitude:</span><span> {currentCoords.lat}</span></p>
+            <p><span>Longitude:</span><span> {currentCoords.lon}</span></p>
           </div>
           <button onClick={onGeoLocation} className=''>{'Re-fetch Coordinates'}</button>
         </div>
@@ -49,7 +54,7 @@ const Geolocation = ({ setGeolocation, resetResults }) => {
       }
       {status === 'error' &&
       <>
-        <p>{currentCoords}</p>
+        <p>{currentError}</p>
         <button onClick={onGeoLocation}>Try Fetch Again</button>
       </>
       }
